@@ -145,18 +145,13 @@
     card.appendChild(wave);
     card.appendChild(el("h3", "artist__name", name));
 
-    var t;
-    if (trackName) {
-      t = el("a", "artist__track");
-      t.href = spotifySearch(name + " " + trackName);
-      t.target = "_blank";
-      t.rel = "noopener";
-      t.setAttribute("aria-label", trackName + " von " + name + " auf Spotify anhören");
-    } else {
-      t = el("span", "artist__track");
-    }
+    var t = el("a", "artist__track");
+    t.href = spotifySearch(trackName ? name + " " + trackName : name);
+    t.target = "_blank";
+    t.rel = "noopener";
+    t.setAttribute("aria-label", (trackName ? trackName + " von " + name : name) + " auf Spotify anhören");
     t.appendChild(el("span", "icon-play"));
-    t.appendChild(doc.createTextNode(trackName || "[Lieblingstrack]"));
+    t.appendChild(doc.createTextNode(trackName || "Auf Spotify hören"));
     card.appendChild(t);
 
     // Startzustand: ein Teil „schon gespielt“
@@ -256,9 +251,9 @@
         bar.appendChild(mf);
         pl.appendChild(btn);
         pl.appendChild(bar);
-        pl.appendChild(el("span", "mix__len", "[" + m.length + "]"));
+        pl.appendChild(el("span", "mix__len", m.length));
         card.appendChild(pl);
-        card.appendChild(el("p", "mix__note", "[SoundCloud-Player]"));
+        card.appendChild(el("p", "mix__note", (m.note ? m.note + " · " : "") + "Bald auf SoundCloud"));
         var mp = makePlayer(card, btn, function (pr) { mf.style.width = (pr * 100).toFixed(2) + "%"; }, 45000);
         mp.progress = [0.62, 0.36, 0.8][idx % 3];
         mf.style.width = (mp.progress * 100) + "%";
@@ -273,21 +268,29 @@
     var today = new Date(); today.setHours(0, 0, 0, 0);
     var upcoming = [], past = [];
     S.gigs.forEach(function (g) {
-      var d = g.date ? new Date(g.date + "T00:00:00") : null;
-      var isUp = d ? d >= today : !!g.upcoming;
-      (isUp ? upcoming : past).push({ g: g, d: d });
+      var monthOnly = /^\d{4}-\d{2}$/.test(g.date || "");
+      var d = g.date ? new Date((monthOnly ? g.date + "-01" : g.date) + "T00:00:00") : null;
+      // Bei reinen Monatsangaben zählt der Gig bis zum Monatsende als „demnächst“
+      var end = d && monthOnly ? new Date(d.getFullYear(), d.getMonth() + 1, 0) : d;
+      var isUp = d ? end >= today : !!g.upcoming;
+      (isUp ? upcoming : past).push({ g: g, d: d, monthOnly: monthOnly });
     });
     function byDate(dir) {
       return function (a, b) {
         if (!a.d && !b.d) return 0;
-        if (!a.d) return 1;
-        if (!b.d) return -1;
+        if (!a.d) return -1;
+        if (!b.d) return 1;
         return dir * (a.d - b.d);
       };
     }
     upcoming.sort(byDate(1));
     past.sort(byDate(-1));
     var fmt = new Intl.DateTimeFormat("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+    var fmtMonth = new Intl.DateTimeFormat("de-DE", { month: "short", year: "numeric" });
+    function when(it) {
+      if (it.d) return it.monthOnly ? fmtMonth.format(it.d) : fmt.format(it.d);
+      return it.g.note || "[Datum]";
+    }
 
     function render(which) {
       var items = which === "upcoming" ? upcoming : past;
@@ -304,7 +307,7 @@
         var row = el("div", "gig" + (which === "upcoming" && i === 0 && it.d ? " gig--next" : ""));
         row.style.animationDelay = (i * 0.05) + "s";
         row.appendChild(el("span", "gig__name", it.g.name));
-        row.appendChild(el("span", "gig__meta", it.g.city + " · " + (it.d ? fmt.format(it.d) : "[Datum]")));
+        row.appendChild(el("span", "gig__meta", it.g.city + " · " + when(it)));
         gigWrap.appendChild(row);
       });
     }
