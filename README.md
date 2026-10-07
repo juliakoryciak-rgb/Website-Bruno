@@ -7,7 +7,7 @@ Zum Ansehen einfach `index.html` im Browser öffnen.
 
 | Was | Wo |
 | --- | --- |
-| E-Mail, Instagram, SoundCloud, TikTok | `js/content.js` |
+| E-Mail, Instagram, SoundCloud | `js/content.js` |
 | „Gerade in jedem Set“ | `js/content.js` → `setTracks` |
 | Mixes + SoundCloud-Links | `js/content.js` → `mixes`. Sobald ein Link eingetragen ist, erscheint der echte SoundCloud-Player. |
 | Gigs | `js/content.js` → `gigs`. Mit `date: "2026-11-14"` sortieren sie sich automatisch in „Demnächst“ oder „Vergangen“ ein. |

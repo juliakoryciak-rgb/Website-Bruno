@@ -9,7 +9,6 @@ window.SITE = {
   email: "brunoooo.mp3@gmail.com",      // später z. B. "booking@brunoooo.de"
   instagram: "https://www.instagram.com/brunoooo.mp3",
   soundcloud: "https://on.soundcloud.com/RsOVpTOIP8UOUVqjec",
-  tiktok: "https://www.tiktok.com/@brunooo.mp3",
 
   // „Gerade in jedem Set“ (Bio-Bereich)
   setTracks: [
@@ -24,7 +23,7 @@ window.SITE = {
   mixes: [
     { title: "Warm-up / Deep", length: "60–90 min", note: "Ruhiger Einstieg in den Abend", soundcloud: "" },
     { title: "Peak Time",      length: "60–90 min", note: "So klingt es um 1 Uhr nachts",  soundcloud: "" },
-    { title: "Signature",      length: "60–90 min", note: "Am meisten brunoooo.mp3",       soundcloud: "" },
+    { title: "Signature",      length: "60–90 min", note: "Klingt am meisten nach ihm",    soundcloud: "" },
   ],
 
   // Gigs
