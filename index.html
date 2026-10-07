@@ -21,6 +21,7 @@
       <a class="nav__logo" href="#top">brunoooo.mp3</a>
       <nav class="nav__links" aria-label="Hauptnavigation">
         <a href="#bio">Bio</a>
+        <a href="#story">Story</a>
         <a href="#sound">Sound</a>
         <a href="#inspiration">Inspiration</a>
         <a href="#mixes">Mixes</a>
@@ -36,6 +37,7 @@
     <section class="hero">
       <div class="hero__inner wrap">
         <div class="hero__text">
+          <p class="clock" data-clock></p>
           <p class="eyebrow">House &amp; Open Format DJ · Hamburg</p>
           <h1 class="hero__title">brunoooo<span class="accent">.mp3</span></h1>
 
@@ -53,6 +55,7 @@
         </div>
 
         <div class="hero__photo">
+          <div class="beam" aria-hidden="true"></div>
           <!-- Bild austauschen: assets/img/bruno-hero.jpg (am besten freigestellt, schwarzer Hintergrund) -->
           <img src="assets/img/bruno-hero.jpg" alt="Bruno am DJ-Pult mit Kopfhörern" width="760" height="970">
         </div>
@@ -99,26 +102,97 @@
       </div>
     </section>
 
-    <!-- ============ 02 SOUND ============ -->
+    <!-- ============ 02 STORY ============ -->
+    <!-- Fotos je Station: <div class="station__ph">…</div> durch <img src="assets/img/story-1.jpg" alt="…"> ersetzen -->
+    <section class="section" id="story">
+      <div class="wrap">
+        <div class="section__head section__head--row reveal">
+          <div>
+            <p class="label">02 · Story</p>
+            <h2 class="h2">Vom Auto in den Club</h2>
+          </div>
+          <div class="story__nav">
+            <button class="story__btn" type="button" data-story-step="-1" aria-label="Zurück">←</button>
+            <button class="story__btn" type="button" data-story-step="1" aria-label="Weiter">→</button>
+          </div>
+        </div>
+      </div>
+      <ol class="story reveal" data-story>
+        <li class="station">
+          <p class="station__when">2025</p>
+          <div class="station__ph">[Foto: der erste Controller]</div>
+          <h3 class="station__title">Ein FLX4</h3>
+          <p class="station__text">Mit einem Kumpel rein ins Musikgeschäft, mit einem Controller wieder raus. So fing es an.</p>
+        </li>
+        <li class="station">
+          <p class="station__when">Danach</p>
+          <div class="station__ph">[Foto: im Auto]</div>
+          <h3 class="station__title">Nächte im Auto</h3>
+          <p class="station__text">Irgendwo in Hamburg geparkt, die Box auf der Rückbank und das Mischpult auf dem Schoß. B2B bis tief in die Nacht.</p>
+        </li>
+        <li class="station">
+          <p class="station__when">Regelmäßig</p>
+          <div class="station__ph">[Foto: Club 25]</div>
+          <h3 class="station__title">Club 25, Reeperbahn</h3>
+          <p class="station__text">Hier hat er seine ersten Club-Gigs gespielt, mit 90ern und 2000ern. Und hier war auch sein Abend mit der besten Stimmung, 300 bis 350 Leute, alle haben mitgesungen.</p>
+        </li>
+        <li class="station">
+          <p class="station__when">Dez. 2025</p>
+          <div class="station__ph">[Foto: Kasematte 20]</div>
+          <h3 class="station__title">Kasematte 20</h3>
+          <p class="station__text">Sein Slot war die Peak Time.</p>
+        </li>
+        <li class="station">
+          <p class="station__when">Jan. 2026</p>
+          <div class="station__ph">[Foto: Baalsaal]</div>
+          <h3 class="station__title">Baalsaal &amp; Kleine Freiheit 3</h3>
+          <p class="station__text">Zwei Gigs auf St. Pauli im selben Monat.</p>
+        </li>
+        <li class="station">
+          <p class="station__when">Aug. 2026</p>
+          <div class="station__ph">[Foto: StrandPauli]</div>
+          <h3 class="station__title">StrandPauli</h3>
+          <p class="station__text">Sonne, Daydrinking und entspannter House. Keine große Party, aber die Location kennt in Hamburg jeder. Einer seiner liebsten Gigs bisher.</p>
+        </li>
+        <li class="station station--next">
+          <p class="station__when">Als Nächstes</p>
+          <div class="station__ph">Coming soon</div>
+          <h3 class="station__title">Techno &amp; eigene Tracks</h3>
+          <p class="station__text">Melodischer Techno auf einem richtigen Floor und die ersten eigenen Tracks. Daran arbeitet er gerade.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ 03 SOUND ============ -->
     <section class="section" id="sound">
       <div class="wrap">
         <div class="section__head section__head--row reveal">
-          <p class="label">02 · Sound</p>
+          <p class="label">03 · Sound</p>
           <p class="section__aside sound__words"><span>Groovy</span><span>Treibend</span><span>Durchmischt</span></p>
         </div>
 
+        <!-- Crossfader: verschiebt den Fokus zwischen den drei Karten -->
+        <div class="fader reveal">
+          <div class="fader__labels" aria-hidden="true"><span>90s &amp; 2000s</span><span>House</span><span>Techno</span></div>
+          <input class="fader__input" id="fader" type="range" min="0" max="100" step="1" value="50" aria-label="Crossfader zwischen 90s &amp; 2000s, House und Techno" data-fader>
+          <p class="fader__readout" data-fader-readout aria-live="polite"></p>
+        </div>
+
         <div class="modes">
-          <article class="card mode reveal">
+          <article class="card mode reveal" data-pos="0" data-name="90s &amp; 2000s" style="--spd:.42s">
+            <div class="mode__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
             <p class="mode__tag">Open Format</p>
             <h3 class="mode__title">90s &amp; 2000s</h3>
             <p class="mode__text">Damit hat er seine ersten Club-Gigs gespielt. Wenn er dafür gebucht wird, ist es meistens Peak Time, und dann wird mitgesungen und durchgetanzt.</p>
           </article>
-          <article class="card mode reveal">
+          <article class="card mode reveal" data-pos="50" data-name="House" style="--spd:.48s">
+            <div class="mode__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
             <p class="mode__tag">Herzstück</p>
             <h3 class="mode__title">House</h3>
             <p class="mode__text">Tech House, Minimal, Melodic, Disco und Afro. Am liebsten groovy und entspannt, aber es darf auch mal härter werden, bis der Floor bebt.</p>
           </article>
-          <article class="card mode reveal">
+          <article class="card mode reveal" data-pos="100" data-name="Techno" style="--spd:.44s">
+            <div class="mode__eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
             <p class="mode__tag mode__tag--next">Als Nächstes</p>
             <h3 class="mode__title">Techno</h3>
             <p class="mode__text">Emotional, melodisch, auch mal Trance. Gespielt hat er das live noch nicht, aber genau da will er hin. Hier sollen die Leute die Musik einfach fühlen.</p>
@@ -127,12 +201,12 @@
       </div>
     </section>
 
-    <!-- ============ 03 INSPIRATION ============ -->
+    <!-- ============ 04 INSPIRATION ============ -->
     <section class="section" id="inspiration">
       <div class="wrap">
         <div class="section__head reveal">
           <div>
-            <p class="label">03 · Inspiration</p>
+            <p class="label">04 · Inspiration</p>
             <h2 class="h2">Was in seiner Plattentasche steckt</h2>
           </div>
           <p class="section__aside">Acht Artists, die man in seinen Sets hört. Bei manchen ganz direkt, bei anderen eher im Gefühl.</p>
@@ -152,22 +226,22 @@
       </div>
     </section>
 
-    <!-- ============ 04 MIXES ============ -->
+    <!-- ============ 05 MIXES ============ -->
     <section class="section" id="mixes">
       <div class="wrap">
         <div class="section__head section__head--row reveal">
-          <p class="label">04 · Mixes</p>
+          <p class="label">05 · Mixes</p>
           <a class="link-arrow" data-link="soundcloud" href="#">Alle Mixes auf SoundCloud <span aria-hidden="true">→</span></a>
         </div>
         <div class="mixes" data-mixes></div>
       </div>
     </section>
 
-    <!-- ============ 05 GIGS ============ -->
+    <!-- ============ 06 GIGS ============ -->
     <section class="section" id="gigs">
       <div class="wrap gigs">
         <div class="gigs__side reveal">
-          <p class="label">05 · Gigs</p>
+          <p class="label">06 · Gigs</p>
           <div class="tabs" role="tablist" aria-label="Gigs filtern">
             <button class="tab is-active" role="tab" aria-selected="true" data-tab="upcoming">Demnächst</button>
             <button class="tab" role="tab" aria-selected="false" data-tab="past">Bisher gespielt</button>
@@ -177,11 +251,11 @@
       </div>
     </section>
 
-    <!-- ============ 06 PRESSE ============ -->
+    <!-- ============ 07 PRESSE ============ -->
     <section class="section" id="presse">
       <div class="wrap">
         <div class="section__head section__head--row reveal">
-          <p class="label">06 · Presse</p>
+          <p class="label">07 · Presse</p>
           <div class="press__btns">
             <!-- Dateien ablegen: assets/press/pressefotos.zip und assets/press/logo-paket.zip -->
             <a class="btn btn--light btn--sm" href="assets/press/pressefotos.zip" download>Pressefotos (ZIP)</a>
@@ -199,10 +273,10 @@
       </div>
     </section>
 
-    <!-- ============ 07 BOOKING ============ -->
+    <!-- ============ 08 BOOKING ============ -->
     <section class="section section--booking" id="booking">
       <div class="wrap booking">
-        <p class="label reveal">07 · Booking</p>
+        <p class="label reveal">08 · Booking</p>
         <a class="booking__mail reveal" data-link="email" href="#">brunoooo.mp3@gmail.com</a>
         <p class="booking__text reveal">Clubs, Bars, Firmenfeiern oder private Partys. Bruno kommt aus Hamburg, spielt aber in ganz Deutschland und steigt für das richtige Booking auch mal in den Flieger.</p>
 
@@ -242,6 +316,23 @@
       <a href="impressum.html">Impressum &amp; Datenschutz</a>
     </div>
   </footer>
+
+  <!-- Easter Egg: 4× aufs Logo klicken oder „oooo“ tippen -->
+  <div class="camper" data-camper hidden aria-hidden="true">
+    <svg viewBox="0 0 120 64" width="120" height="64">
+      <rect x="6" y="10" width="104" height="38" rx="12" fill="#e9e6df"/>
+      <rect x="6" y="30" width="104" height="18" rx="4" fill="#a8c8cc"/>
+      <path d="M6 30h104" stroke="#0a0a0a" stroke-width="2"/>
+      <rect x="18" y="16" width="20" height="12" rx="3" fill="#0a0a0a"/>
+      <rect x="44" y="16" width="20" height="12" rx="3" fill="#0a0a0a"/>
+      <rect x="70" y="16" width="16" height="12" rx="3" fill="#0a0a0a"/>
+      <path d="M92 16h10a6 6 0 0 1 6 6v6H92z" fill="#0a0a0a"/>
+      <circle cx="58" cy="38" r="4" fill="#e9e6df"/>
+      <circle class="camper__wheel" cx="30" cy="50" r="8" fill="#0a0a0a" stroke="#555" stroke-width="3"/>
+      <circle class="camper__wheel" cx="90" cy="50" r="8" fill="#0a0a0a" stroke="#555" stroke-width="3"/>
+    </svg>
+    <span class="camper__say">Muss nicht neu sein. Muss laufen.</span>
+  </div>
 
   <script src="js/content.js"></script>
   <script src="js/main.js"></script>

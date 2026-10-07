@@ -179,7 +179,8 @@
   /* ---------- Player-Logik (Hero + Mixes) ---------- */
   // Nur ein Player gleichzeitig. Ohne SoundCloud-Link ist es eine Vorschau-Animation.
   var players = [];
-  function makePlayer(root, button, onFrame, duration) {
+  function makePlayer(root, button, onFrame, duration, hooks) {
+    hooks = hooks || {};
     var p = { playing: false, progress: 0, raf: 0, last: 0 };
     function frame(ts) {
       if (!p.last) p.last = ts;
@@ -193,6 +194,7 @@
       cancelAnimationFrame(p.raf);
       root.classList.remove("is-playing");
       button.setAttribute("aria-label", "Abspielen");
+      if (hooks.onStop) hooks.onStop();
     };
     p.start = function () {
       players.forEach(function (o) { if (o !== p) o.stop(); });
@@ -200,7 +202,8 @@
       p.last = 0;
       root.classList.add("is-playing");
       button.setAttribute("aria-label", "Pause");
-      if (!reduceMotion) p.raf = requestAnimationFrame(frame);
+      if (hooks.onStart) hooks.onStart();
+      if (!reduceMotion || hooks.always) p.raf = requestAnimationFrame(frame);
     };
     button.addEventListener("click", function () { p.playing ? p.stop() : p.start(); });
     players.push(p);
@@ -211,12 +214,30 @@
   if (hero) {
     var fill = $(".mini-player__fill", hero);
     var knob = $(".mini-player__knob", hero);
-    var hp = makePlayer(hero, $(".play", hero), function (pr) {
+    var heroSection = $(".hero");
+    function setBar(pr) {
       var v = (pr * 100).toFixed(2) + "%";
       fill.style.width = v;
       knob.style.left = v;
-    }, 30000);
-    hp.progress = 0.62;
+    }
+    // Hörprobe: Sobald in content.js „heroSnippet“ eine MP3 steht, spielt der Button echte Musik
+    var audio = S.heroSnippet ? new Audio(S.heroSnippet) : null;
+    if (audio) {
+      audio.preload = "none";
+      audio.addEventListener("ended", function () { hp.stop(); audio.currentTime = 0; setBar(0); });
+    } else {
+      $(".play", hero).title = "Hörprobe folgt";
+    }
+    var hp = makePlayer(hero, $(".play", hero), function (pr) {
+      if (audio && audio.duration) pr = audio.currentTime / audio.duration;
+      setBar(pr);
+    }, 30000, {
+      always: !!audio,
+      onStart: function () { heroSection.classList.add("is-live"); if (audio) audio.play().catch(function () { hp.stop(); }); },
+      onStop: function () { heroSection.classList.remove("is-live"); if (audio) audio.pause(); },
+    });
+    hp.progress = audio ? 0 : 0.62;
+    if (audio) setBar(0);
   }
 
   var mixWrap = $("[data-mixes]");
@@ -303,12 +324,20 @@
         gigWrap.appendChild(empty);
         return;
       }
+      // Jeder Gig als Einlass-Stempel, regelmäßige Gigs als Bändchen
       items.forEach(function (it, i) {
-        var row = el("div", "gig" + (which === "upcoming" && i === 0 && it.d ? " gig--next" : ""));
-        row.style.animationDelay = (i * 0.05) + "s";
-        row.appendChild(el("span", "gig__name", it.g.name));
-        row.appendChild(el("span", "gig__meta", it.g.city + " · " + when(it)));
-        gigWrap.appendChild(row);
+        var rnd = seeded(it.g.name);
+        var band = !it.d && it.g.note;
+        var cls = "stamp" + (band ? " stamp--band" : "") + (rnd() > 0.72 ? " stamp--accent" : "") +
+          (which === "upcoming" && i === 0 && it.d ? " stamp--next" : "");
+        var st = el("div", cls);
+        st.style.setProperty("--r", band ? "0deg" : ((rnd() - 0.5) * 9).toFixed(1) + "deg");
+        st.style.animationDelay = (i * 0.06) + "s";
+        var ink = el("div", "stamp__ink");
+        ink.appendChild(el("span", "stamp__name", it.g.name));
+        ink.appendChild(el("span", "stamp__meta", it.g.city + " · " + when(it)));
+        st.appendChild(ink);
+        gigWrap.appendChild(st);
       });
     }
 
@@ -370,6 +399,114 @@
       var p = v.split("-");
       return p.length === 3 ? p[2] + "." + p[1] + "." + p[0] : v;
     }
+  }
+
+  /* ---------- Uhrzeit im Hero ---------- */
+  var clock = $("[data-clock]");
+  if (clock) {
+    var moods = [
+      [5, "Afterhour vorbei. Kaffee?"],
+      [11, "Zu früh für den Club. Perfekt zum Reinhören."],
+      [15, "Daydrinking-Wetter, wie am StrandPauli."],
+      [19, "Zeit fürs Warm-up."],
+      [23, "Peak Time."],
+    ];
+    var tick = function () {
+      var now = new Date();
+      var h = now.getHours();
+      var mood = h < 3 || h >= 23 ? "Peak Time." : h < 5 ? "Closing. Noch ein Track?" : moods[0][1];
+      if (h >= 5 && h < 23) moods.forEach(function (m) { if (h >= m[0]) mood = m[1]; });
+      var hh = String(h).padStart(2, "0"), mm = String(now.getMinutes()).padStart(2, "0");
+      clock.innerHTML = "";
+      clock.appendChild(el("span", "clock__dot"));
+      clock.appendChild(el("span", "clock__time", hh + ":" + mm));
+      clock.appendChild(el("span", "clock__mood", mood));
+    };
+    tick();
+    setInterval(tick, 30000);
+  }
+
+  /* ---------- Video im Hero (optional) ---------- */
+  if (S.heroVideo) {
+    var heroImg = $(".hero__photo img");
+    var v = doc.createElement("video");
+    v.className = "hero__video";
+    v.src = S.heroVideo;
+    v.poster = heroImg.getAttribute("src");
+    v.muted = true; v.loop = true; v.playsInline = true;
+    v.setAttribute("aria-hidden", "true");
+    if (!reduceMotion) v.autoplay = true;
+    heroImg.replaceWith(v);
+  }
+
+  /* ---------- Crossfader (Sound) ---------- */
+  var fader = $("[data-fader]");
+  if (fader) {
+    var modes = $$(".mode[data-pos]");
+    var readout = $("[data-fader-readout]");
+    var applyFader = function () {
+      var v = +fader.value;
+      var ws = modes.map(function (m) {
+        var w = Math.max(0, 1 - Math.abs(v - +m.getAttribute("data-pos")) / 50);
+        m.style.setProperty("--w", w.toFixed(3));
+        m.classList.toggle("is-live", w > 0.5);
+        return { name: m.getAttribute("data-name"), w: w };
+      });
+      fader.style.setProperty("--v", v + "%");
+      var sum = ws.reduce(function (a, b) { return a + b.w; }, 0) || 1;
+      readout.textContent = ws.filter(function (x) { return x.w > 0.02; })
+        .sort(function (a, b) { return b.w - a.w; })
+        .map(function (x) { return Math.round(x.w / sum * 100) + " % " + x.name; })
+        .join("  ·  ");
+    };
+    fader.addEventListener("input", applyFader);
+    applyFader();
+  }
+
+  /* ---------- Story: Pfeile zum Blättern ---------- */
+  var story = $("[data-story]");
+  if (story) {
+    $$("[data-story-step]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var dir = +b.getAttribute("data-story-step");
+        var card = story.querySelector(".station");
+        var step = card ? card.getBoundingClientRect().width + 16 : 300;
+        story.scrollBy({ left: dir * step, behavior: reduceMotion ? "auto" : "smooth" });
+      });
+    });
+    var updateArrows = function () {
+      var max = story.scrollWidth - story.clientWidth - 4;
+      $$("[data-story-step]").forEach(function (b) {
+        b.disabled = +b.getAttribute("data-story-step") < 0 ? story.scrollLeft <= 4 : story.scrollLeft >= max;
+      });
+    };
+    story.addEventListener("scroll", updateArrows, { passive: true });
+    window.addEventListener("resize", updateArrows);
+    updateArrows();
+  }
+
+  /* ---------- Easter Egg: 4× aufs Logo (für die vier o's) ---------- */
+  var logo = $(".nav__logo");
+  var camper = $("[data-camper]");
+  if (logo && camper) {
+    var clicks = 0, timer, typed = "";
+    var drive = function () {
+      if (camper.classList.contains("is-driving")) return;
+      camper.hidden = false;
+      camper.classList.add("is-driving");
+      setTimeout(function () { camper.classList.remove("is-driving"); camper.hidden = true; }, reduceMotion ? 3000 : 7000);
+    };
+    logo.addEventListener("click", function () {
+      clicks++;
+      clearTimeout(timer);
+      timer = setTimeout(function () { clicks = 0; }, 1200);
+      if (clicks >= 4) { clicks = 0; drive(); }
+    });
+    doc.addEventListener("keydown", function (e) {
+      if (/input|textarea|select/i.test(e.target.tagName)) return;
+      typed = (typed + e.key).slice(-4).toLowerCase();
+      if (typed === "oooo") { typed = ""; drive(); }
+    });
   }
 
   /* ---------- Einblenden beim Scrollen ---------- */
