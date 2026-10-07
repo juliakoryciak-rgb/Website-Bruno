@@ -32,17 +32,18 @@ window.SITE = {
 
   // Gigs
   // date: "JJJJ-MM-TT" oder nur "JJJJ-MM". Gigs ab heute landen unter „Demnächst“.
-  // note: Text statt Datum, z. B. "Regelmäßig" (wird oben angezeigt).
+  // note: Text statt Datum, z. B. "Regelmäßig" (wird zuerst angezeigt).
+  // highlight: true = groß im Line-up
   gigs: [
-    { name: "StrandPauli",           city: "Hamburg",  date: "2026-08" },
+    { name: "StrandPauli",           city: "Hamburg",  date: "2026-08", highlight: true },
     { name: "Sky & Sand Bar",        city: "Hamburg",  date: "2026-06" },
     { name: "Lululemon × Maison Lagree", city: "Hamburg", date: "2026-04" },
     { name: "RipNDip Store Party",   city: "Hamburg",  date: "2026-02" },
-    { name: "Baalsaal",              city: "Hamburg",  date: "2026-01" },
+    { name: "Baalsaal",              city: "Hamburg",  date: "2026-01", highlight: true },
     { name: "Kleine Freiheit 3",     city: "Hamburg",  date: "2026-01" },
-    { name: "Kasematte 20",          city: "Hamburg",  date: "2025-12" },
+    { name: "Kasematte 20",          city: "Hamburg",  date: "2025-12", highlight: true },
     { name: "Maison Lagree Opening", city: "Hamburg",  date: "2025-11" },
-    { name: "Club 25, Reeperbahn",   city: "Hamburg",  note: "Regelmäßig" },
+    { name: "Club 25",               city: "Hamburg",  note: "Regelmäßig", highlight: true },
     { name: "Zaza Club",             city: "Hannover", note: "Regelmäßig" },
   ],
 };

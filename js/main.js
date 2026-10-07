@@ -214,7 +214,6 @@
   if (hero) {
     var fill = $(".mini-player__fill", hero);
     var knob = $(".mini-player__knob", hero);
-    var heroSection = $(".hero");
     function setBar(pr) {
       var v = (pr * 100).toFixed(2) + "%";
       fill.style.width = v;
@@ -233,8 +232,8 @@
       setBar(pr);
     }, 30000, {
       always: !!audio,
-      onStart: function () { heroSection.classList.add("is-live"); if (audio) audio.play().catch(function () { hp.stop(); }); },
-      onStop: function () { heroSection.classList.remove("is-live"); if (audio) audio.pause(); },
+      onStart: function () { if (audio) audio.play().catch(function () { hp.stop(); }); },
+      onStop: function () { if (audio) audio.pause(); },
     });
     hp.progress = audio ? 0 : 0.62;
     if (audio) setBar(0);
@@ -324,21 +323,20 @@
         gigWrap.appendChild(empty);
         return;
       }
-      // Jeder Gig als Einlass-Stempel, regelmäßige Gigs als Bändchen
+      // Gigs als Line-up: Highlights groß, regelmäßige Gigs zuerst
+      var list = el("ul", "lineup");
       items.forEach(function (it, i) {
-        var rnd = seeded(it.g.name);
-        var band = !it.d && it.g.note;
-        var cls = "stamp" + (band ? " stamp--band" : "") + (rnd() > 0.72 ? " stamp--accent" : "") +
-          (which === "upcoming" && i === 0 && it.d ? " stamp--next" : "");
-        var st = el("div", cls);
-        st.style.setProperty("--r", band ? "0deg" : ((rnd() - 0.5) * 9).toFixed(1) + "deg");
-        st.style.animationDelay = (i * 0.06) + "s";
-        var ink = el("div", "stamp__ink");
-        ink.appendChild(el("span", "stamp__name", it.g.name));
-        ink.appendChild(el("span", "stamp__meta", it.g.city + " · " + when(it)));
-        st.appendChild(ink);
-        gigWrap.appendChild(st);
+        var cls = "lineup__item" + (it.g.highlight ? " lineup__item--big" : "") +
+          (!it.d && it.g.note ? " lineup__item--regular" : "") +
+          (which === "upcoming" && i === 0 && it.d ? " lineup__item--next" : "");
+        var li = el("li", cls);
+        li.style.animationDelay = (i * 0.05) + "s";
+        li.title = it.g.city + " · " + when(it);
+        li.appendChild(el("span", "lineup__name", it.g.name));
+        li.appendChild(el("span", "lineup__meta", (it.g.city !== "Hamburg" ? it.g.city + " · " : "") + when(it)));
+        list.appendChild(li);
       });
+      gigWrap.appendChild(list);
     }
 
     var tabs = $$(".tab");
