@@ -323,20 +323,16 @@
         gigWrap.appendChild(empty);
         return;
       }
-      // Gigs als Line-up: Highlights groß, regelmäßige Gigs zuerst
-      var list = el("ul", "lineup");
       items.forEach(function (it, i) {
-        var cls = "lineup__item" + (it.g.highlight ? " lineup__item--big" : "") +
-          (!it.d && it.g.note ? " lineup__item--regular" : "") +
-          (which === "upcoming" && i === 0 && it.d ? " lineup__item--next" : "");
-        var li = el("li", cls);
-        li.style.animationDelay = (i * 0.05) + "s";
-        li.title = it.g.city + " · " + when(it);
-        li.appendChild(el("span", "lineup__name", it.g.name));
-        li.appendChild(el("span", "lineup__meta", (it.g.city !== "Hamburg" ? it.g.city + " · " : "") + when(it)));
-        list.appendChild(li);
+        var row = el("div", "gig");
+        row.style.animationDelay = (i * 0.04) + "s";
+        var name = el("span", "gig__name", it.g.name);
+        if (!it.d && it.g.note) name.appendChild(el("span", "gig__tag", it.g.note));
+        if (which === "upcoming" && i === 0 && it.d) name.appendChild(el("span", "gig__tag", "Next"));
+        row.appendChild(name);
+        row.appendChild(el("span", "gig__meta", it.g.city + (it.d ? " · " + when(it) : "")));
+        gigWrap.appendChild(row);
       });
-      gigWrap.appendChild(list);
     }
 
     var tabs = $$(".tab");
