@@ -14,6 +14,13 @@ window.SITE = {
   heroVideo: "",    // z. B. "assets/video/hero.mp4" (stumm, 10–20 Sek., Schwarzweiß wirkt am besten)
   heroSnippet: "",  // z. B. "assets/audio/hoerprobe.mp3" (ca. 30 Sek. aus dem Signature-Set)
 
+  // Presse-Downloads: Pfad zur Datei eintragen, z. B. "assets/press/pressefotos.zip".
+  // Solange leer, steht auf dem Button „folgt“.
+  press: {
+    photosZip: "",
+    logoZip: "",
+  },
+
   // „Gerade in jedem Set“ (Bio-Bereich)
   setTracks: [
     { title: "Pick Up the Phone", artist: "Pawsa" },

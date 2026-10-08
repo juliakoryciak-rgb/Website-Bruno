@@ -181,6 +181,7 @@
   var players = [];
   function makePlayer(root, button, onFrame, duration, hooks) {
     hooks = hooks || {};
+    if (!button.getAttribute("aria-label")) button.setAttribute("aria-label", "Abspielen");
     var p = { playing: false, progress: 0, raf: 0, last: 0 };
     function frame(ts) {
       if (!p.last) p.last = ts;
@@ -240,6 +241,7 @@
   }
 
   var mixWrap = $("[data-mixes]");
+  var scEmbeds = [];
   if (mixWrap && S.mixes) {
     S.mixes.forEach(function (m, idx) {
       var card = el("article", "card mix reveal");
@@ -254,13 +256,31 @@
       card.appendChild(top);
 
       if (m.soundcloud) {
-        var f = doc.createElement("iframe");
-        f.loading = "lazy";
-        f.allow = "autoplay";
-        f.title = "SoundCloud-Player: " + m.title;
-        f.src = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(m.soundcloud) +
-          "&color=%23a8c8cc&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
-        card.appendChild(f);
+        // Zwei-Klick-Lösung: SoundCloud lädt erst nach Zustimmung (Datenschutz)
+        var gate = el("div", "sc-gate");
+        gate.appendChild(el("p", "sc-gate__text", "Beim Laden des Players werden Daten an SoundCloud übertragen."));
+        var load = el("button", "btn btn--ghost btn--sm", "Player laden");
+        load.type = "button";
+        gate.appendChild(load);
+        card.appendChild(gate);
+        var embed = function () {
+          var f = doc.createElement("iframe");
+          f.loading = "lazy";
+          f.allow = "autoplay";
+          f.title = "SoundCloud-Player: " + m.title;
+          f.src = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(m.soundcloud) +
+            "&color=%23a8c8cc&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
+          gate.replaceWith(f);
+        };
+        // Ein Klick lädt alle Player auf der Seite
+        scEmbeds.push(embed);
+        load.addEventListener("click", function () {
+          try { localStorage.setItem("sc-consent", "1"); } catch (e) {}
+          scEmbeds.splice(0).forEach(function (fn) { fn(); });
+        });
+        var ok = false;
+        try { ok = localStorage.getItem("sc-consent") === "1"; } catch (e) {}
+        if (ok) embed();
       } else {
         var pl = el("div", "mix__player");
         var btn = el("button", "play");
@@ -393,6 +413,45 @@
       var p = v.split("-");
       return p.length === 3 ? p[2] + "." + p[1] + "." + p[0] : v;
     }
+  }
+
+  /* ---------- Presse-Downloads ---------- */
+  $$("[data-press-file]").forEach(function (a) {
+    var file = S.press && S.press[a.getAttribute("data-press-file")];
+    if (file) {
+      a.href = file;
+      a.setAttribute("download", "");
+    } else {
+      a.classList.add("is-soon");
+      a.setAttribute("aria-disabled", "true");
+      a.removeAttribute("href");
+      a.appendChild(el("span", "btn__soon", "folgt"));
+    }
+  });
+
+  /* ---------- E-Mail kopieren ---------- */
+  var copyBtn = $("[data-copy-email]");
+  if (copyBtn) {
+    var done = function () {
+      copyBtn.textContent = "Kopiert";
+      copyBtn.classList.add("is-done");
+      setTimeout(function () { copyBtn.textContent = "Kopieren"; copyBtn.classList.remove("is-done"); }, 1800);
+    };
+    var selectMail = function () {
+      var r = doc.createRange();
+      r.selectNodeContents($(".booking__mail"));
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(r);
+    };
+    copyBtn.addEventListener("click", function () {
+      var mail = S.email || "";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(mail).then(done, selectMail);
+      } else {
+        selectMail();
+      }
+    });
   }
 
   /* ---------- Uhrzeit im Hero ---------- */

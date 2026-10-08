@@ -15,7 +15,10 @@ Zum Ansehen einfach `index.html` im Browser öffnen.
 | Lieblingstracks der Artists | `index.html` → `data-track="…"` bei der jeweiligen Karte |
 | Hero-Foto | `assets/img/bruno-hero.jpg` ersetzen (am besten freigestellt auf Schwarz, hochkant, ca. 1000 × 1300 px) |
 | Pressefotos | `<div class="ph">…</div>` in `index.html` durch `<img src="assets/img/press-1.jpg" alt="…">` ersetzen |
-| Downloads | `assets/press/pressefotos.zip` und `assets/press/logo-paket.zip` ablegen |
+| Downloads | ZIP-Dateien z. B. in `assets/press/` ablegen und den Pfad in `js/content.js` → `press` eintragen. Solange leer, steht „folgt“ auf dem Button. |
+| Hero-Video / Hörprobe | `js/content.js` → `heroVideo` und `heroSnippet` |
+| Story-Fotos | `index.html` → Abschnitt „Story“, `<div class="station__ph">…</div>` durch ein `<img>` ersetzen |
+| Link-Vorschau (WhatsApp & Co.) | `assets/img/og-image.jpg`. Nach dem Online-Gang in `index.html` bei `og:image` die volle Adresse eintragen, z. B. `https://brunoooo.de/assets/img/og-image.jpg` |
 | Impressum | `impressum.html` |
 
 > Das aktuelle Hero-Foto ist aus dem Design-Entwurf ausgeschnitten und nur ein Platzhalter. Bitte durch das Originalfoto ersetzen.
@@ -24,3 +27,9 @@ Zum Ansehen einfach `index.html` im Browser öffnen.
 
 Zum Beispiel kostenlos über **GitHub Pages**: Settings → Pages → Branch auswählen → Speichern.
 Alternativ den Ordner bei Netlify per Drag-and-drop hochladen.
+
+## Datenschutz-Hinweise zur Technik
+
+- Schriften liegen lokal in `assets/fonts/`, es gibt keine Verbindung zu Google Fonts.
+- SoundCloud-Player laden erst nach einem Klick auf „Player laden“ (Zwei-Klick-Lösung). Die Zustimmung merkt sich der Browser.
+- Spotify, Instagram und SoundCloud sind nur verlinkt, nicht eingebettet.

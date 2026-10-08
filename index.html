@@ -6,9 +6,18 @@
   <title>brunoooo.mp3 – Open Format DJ aus Hamburg</title>
   <meta name="description" content="brunoooo.mp3 – House &amp; Open Format DJ aus Hamburg. House mit Groove und Druck, dazu Club-Hits der 90er und 2000er. Jetzt Booking anfragen.">
   <meta name="theme-color" content="#0a0a0a">
-  <meta property="og:title" content="brunoooo.mp3 – Open Format DJ aus Hamburg">
-  <meta property="og:description" content="House mit Groove und Druck, dazu Club-Hits der 90er und 2000er.">
-  <meta property="og:image" content="assets/img/bruno-hero.jpg">
+  <!-- Link-Vorschau (WhatsApp, Instagram, iMessage …). Nach dem Online-Gang og:image und og:url auf die volle Adresse setzen, z. B. https://brunoooo.de/assets/img/og-image.jpg -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="brunoooo.mp3">
+  <meta property="og:title" content="brunoooo.mp3 – House &amp; Open Format DJ aus Hamburg">
+  <meta property="og:description" content="House mit Groove und Druck, dazu die Club-Hits der 90er und 2000er. Jetzt Booking anfragen.">
+  <meta property="og:image" content="assets/img/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="brunoooo.mp3 am DJ-Pult">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0a'/%3E%3Cg fill='%23a8c8cc'%3E%3Crect x='7' y='12' width='3' height='8' rx='1.5'/%3E%3Crect x='12' y='7' width='3' height='18' rx='1.5'/%3E%3Crect x='17' y='10' width='3' height='12' rx='1.5'/%3E%3Crect x='22' y='13' width='3' height='6' rx='1.5'/%3E%3C/g%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -56,7 +65,7 @@
 
         <div class="hero__photo">
           <!-- Bild austauschen: assets/img/bruno-hero.jpg (am besten freigestellt, schwarzer Hintergrund) -->
-          <img src="assets/img/bruno-hero.jpg" alt="Bruno am DJ-Pult mit Kopfhörern" width="760" height="970">
+          <img src="assets/img/bruno-hero.jpg" alt="Bruno am DJ-Pult mit Kopfhörern" width="760" height="970" fetchpriority="high">
         </div>
       </div>
     </section>
@@ -116,7 +125,7 @@
           </div>
         </div>
       </div>
-      <ol class="story reveal" data-story>
+      <ol class="story reveal" data-story tabindex="0" aria-label="Stationen, seitlich scrollbar">
         <li class="station">
           <p class="station__when">2025</p>
           <div class="station__ph">[Foto: der erste Controller]</div>
@@ -242,11 +251,11 @@
         <div class="gigs__side reveal">
           <p class="label">06 · Gigs</p>
           <div class="tabs" role="tablist" aria-label="Gigs filtern">
-            <button class="tab is-active" role="tab" aria-selected="true" data-tab="upcoming">Demnächst</button>
-            <button class="tab" role="tab" aria-selected="false" data-tab="past">Bisher gespielt</button>
+            <button class="tab is-active" role="tab" aria-selected="true" data-tab="upcoming" aria-controls="gigs-panel">Demnächst</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="past" aria-controls="gigs-panel">Bisher gespielt</button>
           </div>
         </div>
-        <div class="gigs__list reveal" data-gigs aria-live="polite"></div>
+        <div class="gigs__list reveal" id="gigs-panel" role="tabpanel" data-gigs aria-live="polite"></div>
       </div>
     </section>
 
@@ -256,18 +265,18 @@
         <div class="section__head section__head--row reveal">
           <p class="label">07 · Presse</p>
           <div class="press__btns">
-            <!-- Dateien ablegen: assets/press/pressefotos.zip und assets/press/logo-paket.zip -->
-            <a class="btn btn--light btn--sm" href="assets/press/pressefotos.zip" download>Pressefotos (ZIP)</a>
-            <a class="btn btn--ghost btn--sm" href="assets/press/logo-paket.zip" download>Logo-Paket</a>
+            <!-- Dateien in js/content.js unter „press“ eintragen, bis dahin steht dort „folgt“ -->
+            <a class="btn btn--light btn--sm" data-press-file="photosZip" href="#">Pressefotos (ZIP)</a>
+            <a class="btn btn--ghost btn--sm" data-press-file="logoZip" href="#">Logo-Paket</a>
           </div>
         </div>
 
-        <!-- Fotos austauschen: <div class="ph"> durch <img src="assets/img/press-1.jpg" alt="..."> ersetzen -->
+        <!-- Fotos austauschen: <div class="ph">…</div> durch <img src="assets/img/press-1.jpg" alt="…"> ersetzen -->
         <div class="press">
-          <figure class="press__item reveal"><div class="ph">[Portrait]</div></figure>
-          <figure class="press__item reveal"><div class="ph">[Am Pult, Event-Licht]</div></figure>
-          <figure class="press__item reveal"><div class="ph">[Crowd von hinten]</div></figure>
-          <figure class="press__item reveal"><div class="ph">[Querformat für Flyer]</div></figure>
+          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Portrait</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
+          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Am Pult</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
+          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Hände an den Reglern</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
+          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Querformat für Flyer</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
         </div>
       </div>
     </section>
@@ -276,22 +285,25 @@
     <section class="section section--booking" id="booking">
       <div class="wrap booking">
         <p class="label reveal">08 · Booking</p>
-        <a class="booking__mail reveal" data-link="email" href="#">brunoooo.mp3@gmail.com</a>
+        <div class="booking__mailrow reveal">
+          <a class="booking__mail" data-link="email" href="#">brunoooo.mp3@gmail.com</a>
+          <button class="copy" type="button" data-copy-email aria-label="E-Mail-Adresse kopieren">Kopieren</button>
+        </div>
         <p class="booking__text reveal">Clubs, Bars, Firmenfeiern oder private Partys. Bruno kommt aus Hamburg, spielt aber in ganz Deutschland und steigt für das richtige Booking auch mal in den Flieger.</p>
 
         <form class="card form reveal" data-booking-form novalidate>
           <div class="form__grid">
-            <label class="field"><span>Name</span><input name="name" type="text" autocomplete="name" required></label>
-            <label class="field"><span>E-Mail</span><input name="email" type="email" autocomplete="email" required></label>
-            <label class="field"><span>Datum</span><input name="date" type="date"></label>
-            <label class="field"><span>Ort / Location</span><input name="location" type="text" placeholder="z. B. Hamburg, Club XY"></label>
+            <label class="field"><span>Name</span><input id="f-name" name="name" type="text" autocomplete="name" required></label>
+            <label class="field"><span>E-Mail</span><input id="f-email" name="email" type="email" autocomplete="email" required></label>
+            <label class="field field--half"><span>Datum</span><input id="f-date" name="date" type="date"></label>
+            <label class="field field--half"><span>Gäste (ca.)</span><input id="f-guests" name="guests" type="number" min="1" inputmode="numeric"></label>
+            <label class="field"><span>Ort / Location</span><input id="f-location" name="location" type="text" placeholder="z. B. Hamburg, Club XY"></label>
             <label class="field"><span>Art des Events</span>
-              <select name="type">
+              <select id="f-type" name="type">
                 <option>Club</option><option>Bar</option><option>Firmenevent</option><option>Private Event</option><option>Festival</option><option>Sonstiges</option>
               </select>
             </label>
-            <label class="field"><span>Gäste (ca.)</span><input name="guests" type="number" min="1" inputmode="numeric"></label>
-            <label class="field field--full"><span>Nachricht</span><textarea name="message" rows="4" placeholder="Was für ein Abend soll es werden?"></textarea></label>
+            <label class="field field--full"><span>Nachricht</span><textarea id="f-message" name="message" rows="4" placeholder="Was für ein Abend soll es werden?"></textarea></label>
           </div>
           <div class="form__foot">
             <p class="form__hint">Öffnet dein E-Mail-Programm mit einer fertigen Anfrage.</p>
