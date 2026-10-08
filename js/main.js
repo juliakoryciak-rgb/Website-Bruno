@@ -562,26 +562,14 @@
     });
   }
 
-  /* ---------- Tiefe: Parallax, Genre-Band, 3D-Karten ---------- */
+  /* ---------- Bewegung: Genre-Band, 3D-Karten ---------- */
   if (!reduceMotion) {
     var marqueeSkew = $(".marquee__skew");
-    var numbered = [];
-    $$("main .section").forEach(function (sec) {
-      var lbl = $(".label", sec);
-      var m = lbl && lbl.textContent.match(/^(\d{2})/);
-      if (m) { sec.setAttribute("data-num", m[1]); numbered.push(sec); }
-    });
 
     var lastY = window.scrollY, skew = 0, ticking = false;
     var update = function () {
       ticking = false;
-      var y = window.scrollY, vh = window.innerHeight;
-      // Abschnittsnummern bewegen sich langsamer als der Inhalt
-      numbered.forEach(function (sec) {
-        var r = sec.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) return;
-        sec.style.setProperty("--py", ((vh / 2 - (r.top + r.height / 2)) * 0.18).toFixed(1) + "px");
-      });
+      var y = window.scrollY;
       // Genre-Band kippt mit der Scroll-Geschwindigkeit
       var v = y - lastY; lastY = y;
       skew += (Math.max(-12, Math.min(12, v * 0.25)) - skew) * 0.25;

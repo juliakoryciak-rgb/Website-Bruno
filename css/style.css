@@ -530,15 +530,6 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
 
 .stage { overflow: clip; }
 
-/* Große Abschnittsnummern im Hintergrund (Parallax) */
-.section[data-num]::after {
-  content: attr(data-num); position: absolute; z-index: 0; top: 0; right: max(var(--gutter), calc((100% - var(--wrap)) / 2 - 40px));
-  font-size: clamp(140px, 24vw, 320px); font-weight: 600; line-height: 1; letter-spacing: -.06em;
-  color: transparent; -webkit-text-stroke: 1px #ffffff0c; pointer-events: none; user-select: none;
-  transform: translateY(var(--py, 0px));
-}
-.section > *, .section > .story { position: relative; z-index: 1; }
-
 /* Genre-Band reagiert auf die Scroll-Geschwindigkeit */
 .marquee__skew { transform: skewX(var(--skew, 0deg)); }
 
@@ -554,7 +545,6 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
 .mix.tilt, .station__ph.tilt { transition: transform .2s ease-out; }
 
 @media (max-width: 760px) {
-  .section[data-num]::after { font-size: 42vw; top: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
