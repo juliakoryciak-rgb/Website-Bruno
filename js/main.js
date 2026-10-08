@@ -436,19 +436,36 @@
   if (gallery && S.gallery && S.gallery.length) {
     var base = "assets/img/galerie/";
     S.gallery.forEach(function (g, i) {
-      var b = el("button", "gallery__item reveal");
+      var b = el("button", "gallery__item");
       b.type = "button";
       b.setAttribute("aria-label", "Foto vergrößern: " + (g.caption || g.alt));
       var im = el("img");
       im.src = base + g.file + "-klein.jpg";
       im.alt = g.alt || "";
-      im.loading = "lazy";
-      im.decoding = "async";
+      im.decoding = "async"; // klein genug, um alle direkt zu laden (kein Lazy-Loading in der Seitwärts-Reihe)
       b.appendChild(im);
       if (g.caption) b.appendChild(el("span", "gallery__cap", g.caption));
       b.addEventListener("click", function () { openLb(i); });
       gallery.appendChild(b);
     });
+
+    // Pfeile zum Blättern in der Fotoreihe
+    var galBtns = $$("[data-gal-step]");
+    galBtns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        gallery.scrollBy({ left: +btn.getAttribute("data-gal-step") * gallery.clientWidth * 0.8, behavior: reduceMotion ? "auto" : "smooth" });
+      });
+    });
+    var galArrows = function () {
+      var max = gallery.scrollWidth - gallery.clientWidth - 4;
+      galBtns.forEach(function (btn) {
+        btn.disabled = +btn.getAttribute("data-gal-step") < 0 ? gallery.scrollLeft <= 4 : gallery.scrollLeft >= max;
+      });
+    };
+    gallery.addEventListener("scroll", galArrows, { passive: true });
+    window.addEventListener("resize", galArrows);
+    $$("img", gallery).forEach(function (im) { im.addEventListener("load", galArrows); });
+    galArrows();
 
     var cur = 0, lbImg = $("[data-lb-img]", lb), lbCap = $("[data-lb-caption]", lb), lbCount = $("[data-lb-count]", lb);
     var show = function (i) {
@@ -671,7 +688,7 @@
       });
     }, { rootMargin: "0px 0px -8% 0px" });
     // Leichte Staffelung bei Karten-Rastern
-    $$(".artists, .mixes, .gallery").forEach(function (grid) {
+    $$(".artists, .mixes").forEach(function (grid) {
       $$(".reveal", grid).forEach(function (c, i) { c.style.setProperty("--d", (i % 4) * 0.07 + "s"); });
     });
     reveals.forEach(function (r) { io.observe(r); });

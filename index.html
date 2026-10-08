@@ -278,10 +278,13 @@
       <div class="wrap">
         <div class="section__head section__head--row reveal">
           <p class="label">07 · Galerie</p>
-          <p class="section__aside">Antippen zum Vergrößern</p>
+          <div class="story__nav">
+            <button class="story__btn" type="button" data-gal-step="-1" aria-label="Zurück">←</button>
+            <button class="story__btn" type="button" data-gal-step="1" aria-label="Weiter">→</button>
+          </div>
         </div>
-        <div class="gallery" data-gallery></div>
       </div>
+      <div class="gallery reveal" data-gallery tabindex="0" aria-label="Fotos, seitlich scrollbar. Antippen zum Vergrößern"></div>
     </section>
 
     <dialog class="lightbox" data-lightbox aria-label="Foto-Ansicht">
