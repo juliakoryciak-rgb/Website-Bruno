@@ -14,12 +14,19 @@ window.SITE = {
   heroVideo: "",    // z. B. "assets/video/hero.mp4" (stumm, 10–20 Sek., Schwarzweiß wirkt am besten)
   heroSnippet: "",  // z. B. "assets/audio/hoerprobe.mp3" (ca. 30 Sek. aus dem Signature-Set)
 
-  // Presse-Downloads: Pfad zur Datei eintragen, z. B. "assets/press/pressefotos.zip".
-  // Solange leer, steht auf dem Button „folgt“.
-  press: {
-    photosZip: "",
-    logoZip: "",
-  },
+  // Galerie: Fotos in assets/img/galerie/ ablegen, jeweils groß (name.jpg) und klein (name-klein.jpg).
+  // Reihenfolge hier = Reihenfolge auf der Seite.
+  gallery: [
+    { file: "strandpauli-pult", alt: "Bruno legt am StrandPauli auf, im Hintergrund die Hafenkräne", caption: "StrandPauli, Hamburg" },
+    { file: "bergbar-cdj",      alt: "Bruno am CDJ in einer Bar mit Blick auf die Berge",          caption: "Am CDJ mit Bergblick" },
+    { file: "sky-sand",         alt: "Bruno am DJ-Pult im Sky & Sand Beachclub",                   caption: "Sky & Sand Beachclub, Hamburg" },
+    { file: "setup-wasser",     alt: "Controller-Setup am Wasser bei Sonnenuntergang",             caption: "Setup am Wasser" },
+    { file: "berge-portrait",   alt: "Bruno lächelnd beim Wandern in den Bergen",                  caption: "Unterwegs in den Bergen" },
+    { file: "strandpauli-b2b",  alt: "Bruno und ein Freund hinter dem Pult am StrandPauli",         caption: "StrandPauli, Hamburg" },
+    { file: "regenbogen",       alt: "Regenbogen über dem Wasser in der Abenddämmerung",           caption: "Abendstimmung" },
+    { file: "abendhimmel",      alt: "Bruno von hinten vor rosa Abendhimmel",                      caption: "Abendstimmung" },
+    { file: "berge-tal",        alt: "Bruno in einem Bergtal mit Geröll und blauem Himmel",         caption: "Unterwegs in den Bergen" },
+  ],
 
   // „Gerade in jedem Set“ (Bio-Bereich)
   setTracks: [

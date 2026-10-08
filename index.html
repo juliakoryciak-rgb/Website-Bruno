@@ -35,7 +35,7 @@
         <a href="#inspiration">Inspiration</a>
         <a href="#mixes">Mixes</a>
         <a href="#gigs">Gigs</a>
-        <a href="#presse">Presse</a>
+        <a href="#galerie">Galerie</a>
         <a href="#booking">Booking</a>
       </nav>
     </div>
@@ -272,27 +272,27 @@
       </div>
     </section>
 
-    <!-- ============ 07 PRESSE ============ -->
-    <section class="section" id="presse">
+    <!-- ============ 07 GALERIE ============ -->
+    <!-- Fotos werden aus js/content.js → „gallery“ geladen -->
+    <section class="section" id="galerie">
       <div class="wrap">
         <div class="section__head section__head--row reveal">
-          <p class="label">07 · Presse</p>
-          <div class="press__btns">
-            <!-- Dateien in js/content.js unter „press“ eintragen, bis dahin steht dort „folgt“ -->
-            <a class="btn btn--light btn--sm" data-press-file="photosZip" href="#">Pressefotos (ZIP)</a>
-            <a class="btn btn--ghost btn--sm" data-press-file="logoZip" href="#">Logo-Paket</a>
-          </div>
+          <p class="label">07 · Galerie</p>
+          <p class="section__aside">Antippen zum Vergrößern</p>
         </div>
-
-        <!-- Fotos austauschen: <div class="ph">…</div> durch <img src="assets/img/press-1.jpg" alt="…"> ersetzen -->
-        <div class="press">
-          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Portrait</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
-          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Am Pult</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
-          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Hände an den Reglern</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
-          <figure class="press__item reveal"><div class="ph"><span class="ph__label">Querformat für Flyer</span><span class="ph__soon">Folgt nach dem Shooting</span></div></figure>
-        </div>
+        <div class="gallery" data-gallery></div>
       </div>
     </section>
+
+    <dialog class="lightbox" data-lightbox aria-label="Foto-Ansicht">
+      <button class="lightbox__close" type="button" data-lb-close aria-label="Schließen">✕</button>
+      <button class="lightbox__nav lightbox__nav--prev" type="button" data-lb-step="-1" aria-label="Vorheriges Foto">←</button>
+      <figure class="lightbox__figure">
+        <img data-lb-img alt="">
+        <figcaption class="lightbox__caption"><span data-lb-caption></span><span class="lightbox__count" data-lb-count></span></figcaption>
+      </figure>
+      <button class="lightbox__nav lightbox__nav--next" type="button" data-lb-step="1" aria-label="Nächstes Foto">→</button>
+    </dialog>
 
     <!-- ============ 08 BOOKING ============ -->
     <section class="section section--booking" id="booking">

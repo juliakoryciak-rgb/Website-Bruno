@@ -14,8 +14,7 @@ Zum Ansehen einfach `index.html` im Browser öffnen.
 | Bio-Text, Genres, Artists | `index.html` (Abschnitte sind kommentiert) |
 | Lieblingstracks der Artists | `index.html` → `data-track="…"` bei der jeweiligen Karte |
 | Hero-Foto | `assets/img/bruno-hero.jpg` ersetzen (am besten freigestellt auf Schwarz, hochkant, ca. 1000 × 1300 px) |
-| Pressefotos | `<div class="ph">…</div>` in `index.html` durch `<img src="assets/img/press-1.jpg" alt="…">` ersetzen |
-| Downloads | ZIP-Dateien z. B. in `assets/press/` ablegen und den Pfad in `js/content.js` → `press` eintragen. Solange leer, steht „folgt“ auf dem Button. |
+| Galerie | Foto zweimal in `assets/img/galerie/` ablegen: groß als `name.jpg` (ca. 1600 px) und klein als `name-klein.jpg` (ca. 720 px). Dann in `js/content.js` → `gallery` eine Zeile mit `file`, `alt` und `caption` ergänzen. |
 | Hero-Video / Hörprobe | `js/content.js` → `heroVideo` und `heroSnippet` |
 | Story-Fotos | `index.html` → Abschnitt „Story“, `<div class="station__ph">…</div>` durch ein `<img>` ersetzen |
 | Link-Vorschau (WhatsApp & Co.) | `assets/img/og-image.jpg`. Nach dem Online-Gang in `index.html` bei `og:image` die volle Adresse eintragen, z. B. `https://brunoooo.de/assets/img/og-image.jpg` |
