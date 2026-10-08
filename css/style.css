@@ -149,12 +149,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
-.marquee__track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
-.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__track { display: flex; width: max-content; animation: marquee var(--dur, 40s) linear infinite; }
 .marquee__list { display: flex; margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: 13px; color: #cfcfcf; }
 .marquee__list li { white-space: nowrap; }
 .marquee__list li::before { content: "/"; color: var(--dim); margin: 0 30px; }
-@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes marquee { to { transform: translateX(var(--shift, -50%)); } }
 
 /* ---------- Sections ---------- */
 .section { padding: var(--section-y) 0; position: relative; }

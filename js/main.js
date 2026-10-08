@@ -76,13 +76,28 @@
     $$("main section[id]").forEach(function (s) { spy.observe(s); });
   }
 
-  /* ---------- Genre-Laufband: Inhalt verdoppeln für Endlos-Schleife ---------- */
+  /* ---------- Genre-Laufband: so oft kopieren, dass nie eine Lücke entsteht ---------- */
   var track = $(".marquee__track");
   if (track) {
     var list = $(".marquee__list", track);
-    var copy = list.cloneNode(true);
-    copy.setAttribute("aria-hidden", "true");
-    track.appendChild(copy);
+    var fillMarquee = function () {
+      $$(".marquee__list[aria-hidden]", track).forEach(function (c) { c.remove(); });
+      var w = list.getBoundingClientRect().width;
+      if (!w) return;
+      // Mindestens zwei Bildschirmbreiten plus eine Liste, damit die Schleife nahtlos ist
+      var copies = Math.ceil((window.innerWidth * 2) / w) + 1;
+      for (var i = 0; i < copies; i++) {
+        var copy = list.cloneNode(true);
+        copy.setAttribute("aria-hidden", "true");
+        track.appendChild(copy);
+      }
+      track.style.setProperty("--shift", -w + "px");
+      track.style.setProperty("--dur", (w / 45).toFixed(1) + "s"); // ca. 45 px pro Sekunde
+    };
+    fillMarquee();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fillMarquee);
+    var mqTimer;
+    window.addEventListener("resize", function () { clearTimeout(mqTimer); mqTimer = setTimeout(fillMarquee, 200); });
   }
 
   /* ---------- Equalizer (Bio) ---------- */
