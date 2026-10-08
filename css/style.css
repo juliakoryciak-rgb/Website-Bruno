@@ -528,15 +528,7 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
    Tiefe & Übergänge
    ========================================================================== */
 
-/* Hero bleibt stehen, die Bühne schiebt sich wie ein Fenster darüber */
-.hero { position: sticky; top: var(--hero-stick, 0px); z-index: 0; }
-.hero__inner { transform-origin: 50% 70%; will-change: transform, opacity; background: var(--bg); }
-.stage {
-  position: relative; z-index: 1; background: var(--bg);
-  border-radius: 28px 28px 0 0; overflow: clip;
-  box-shadow: 0 -24px 60px #000000c0, 0 -1px 0 var(--line);
-}
-.footer { position: relative; z-index: 1; background: var(--bg); }
+.stage { overflow: clip; }
 
 /* Große Abschnittsnummern im Hintergrund (Parallax) */
 .section[data-num]::after {
@@ -562,7 +554,6 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
 .mix.tilt, .station__ph.tilt { transition: transform .2s ease-out; }
 
 @media (max-width: 760px) {
-  .stage { border-radius: 22px 22px 0 0; }
   .section[data-num]::after { font-size: 42vw; top: 10px; }
 }
 
@@ -572,5 +563,5 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   .js .reveal { opacity: 1; transform: none; }
   .js .reveal .h2 { clip-path: none; transform: none; }
-  .hero { position: relative; }
+
 }

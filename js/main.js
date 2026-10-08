@@ -562,10 +562,8 @@
     });
   }
 
-  /* ---------- Tiefe: Hero, Parallax, Genre-Band, 3D-Karten ---------- */
+  /* ---------- Tiefe: Parallax, Genre-Band, 3D-Karten ---------- */
   if (!reduceMotion) {
-    var heroEl = $(".hero");
-    var heroInner = $(".hero__inner");
     var marqueeSkew = $(".marquee__skew");
     var numbered = [];
     $$("main .section").forEach(function (sec) {
@@ -574,24 +572,10 @@
       if (m) { sec.setAttribute("data-num", m[1]); numbered.push(sec); }
     });
 
-    var stick = 0;
-    var measure = function () {
-      // Ist der Hero höher als der Bildschirm, scrollt er erst bis zu seinem Ende und bleibt dann stehen
-      stick = Math.min(0, window.innerHeight - heroEl.offsetHeight);
-      heroEl.style.setProperty("--hero-stick", stick + "px");
-    };
-    measure();
-    window.addEventListener("resize", measure);
-
     var lastY = window.scrollY, skew = 0, ticking = false;
     var update = function () {
       ticking = false;
       var y = window.scrollY, vh = window.innerHeight;
-      // Hero tritt zurück, sobald die Bühne darüber fährt
-      var start = -stick;
-      var p = Math.min(1, Math.max(0, (y - start) / (vh * 0.9)));
-      heroInner.style.transform = "translateY(" + (p * 40).toFixed(1) + "px) scale(" + (1 - p * 0.07).toFixed(4) + ")";
-      heroInner.style.opacity = (1 - p * 0.75).toFixed(3);
       // Abschnittsnummern bewegen sich langsamer als der Inhalt
       numbered.forEach(function (sec) {
         var r = sec.getBoundingClientRect();
