@@ -103,16 +103,22 @@
           </ul>
         </div>
 
+        <div class="bio__side">
         <aside class="card nowplaying reveal" aria-label="Gerade in jedem Set">
           <p class="nowplaying__head"><span class="dot"></span>Gerade in jedem Set</p>
           <ol class="nowplaying__list" data-set-tracks></ol>
           <p class="nowplaying__foot" data-set-updated></p>
         </aside>
+        <figure class="bio__photo reveal">
+          <img src="assets/img/bio-berge.jpg" alt="Bruno lächelnd beim Wandern in den Bergen" loading="lazy" width="750" height="1000">
+          <figcaption>Wenn er nicht auflegt, ist er oft in den Bergen.</figcaption>
+        </figure>
+        </div>
       </div>
     </section>
 
     <!-- ============ 02 STORY ============ -->
-    <!-- Fotos je Station: <div class="station__ph">…</div> durch <img src="assets/img/story-1.jpg" alt="…"> ersetzen -->
+    <!-- Fotos je Station: <div class="station__ph">…</div> durch <div class="station__ph station__ph--img"><img src="assets/img/…" alt="…"></div> ersetzen -->
     <section class="section" id="story">
       <div class="wrap">
         <div class="section__head section__head--row reveal">
@@ -129,7 +135,7 @@
       <ol class="story reveal" data-story tabindex="0" aria-label="Stationen, seitlich scrollbar">
         <li class="station">
           <p class="station__when">2025</p>
-          <div class="station__ph">[Foto: der erste Controller]</div>
+          <div class="station__ph station__ph--img"><img src="assets/img/story-setup-wasser.jpg" alt="Controller-Setup am Wasser bei Sonnenuntergang" loading="lazy" width="668" height="1000" style="object-position:50% 70%"></div>
           <h3 class="station__title">Ein FLX4</h3>
           <p class="station__text">Mit einem Kumpel rein ins Musikgeschäft, mit einem Controller wieder raus. So fing es an.</p>
         </li>
@@ -158,14 +164,20 @@
           <p class="station__text">Zwei Gigs auf St. Pauli im selben Monat.</p>
         </li>
         <li class="station">
+          <p class="station__when">Juni 2026</p>
+          <div class="station__ph station__ph--img"><img src="assets/img/story-sky-sand.jpg" alt="Bruno am DJ-Pult im Sky &amp; Sand Beachclub" loading="lazy" width="668" height="1000" style="object-position:50% 22%"></div>
+          <h3 class="station__title">Sky &amp; Sand Beachclub</h3>
+          <p class="station__text">Beachclub-Feeling mitten in Hamburg. Weiße Holzdecks, Sonne und House am Nachmittag.</p>
+        </li>
+        <li class="station">
           <p class="station__when">Aug. 2026</p>
-          <div class="station__ph">[Foto: StrandPauli]</div>
+          <div class="station__ph station__ph--img"><img src="assets/img/story-strandpauli.jpg" alt="Bruno legt am StrandPauli auf, im Hintergrund die Hafenkräne" loading="lazy" width="668" height="1000" style="object-position:50% 45%"></div>
           <h3 class="station__title">StrandPauli</h3>
           <p class="station__text">Sonne, Daydrinking und entspannter House. Keine große Party, aber die Location kennt in Hamburg jeder. Einer seiner liebsten Gigs bisher.</p>
         </li>
         <li class="station station--next">
           <p class="station__when">Als Nächstes</p>
-          <div class="station__ph">Coming soon</div>
+          <div class="station__ph station__ph--img"><img src="assets/img/story-als-naechstes.jpg" alt="Bruno von hinten vor rosa Abendhimmel" loading="lazy" width="750" height="1000" style="object-position:50% 75%"><span class="station__badge">Coming soon</span></div>
           <h3 class="station__title">Techno &amp; eigene Tracks</h3>
           <p class="station__text">Melodischer Techno auf einem richtigen Floor und die ersten eigenen Tracks. Daran arbeitet er gerade.</p>
         </li>
