@@ -562,6 +562,71 @@
     });
   }
 
+  /* ---------- Tiefe: Hero, Parallax, Genre-Band, 3D-Karten ---------- */
+  if (!reduceMotion) {
+    var heroEl = $(".hero");
+    var heroInner = $(".hero__inner");
+    var marqueeSkew = $(".marquee__skew");
+    var numbered = [];
+    $$("main .section").forEach(function (sec) {
+      var lbl = $(".label", sec);
+      var m = lbl && lbl.textContent.match(/^(\d{2})/);
+      if (m) { sec.setAttribute("data-num", m[1]); numbered.push(sec); }
+    });
+
+    var stick = 0;
+    var measure = function () {
+      // Ist der Hero höher als der Bildschirm, scrollt er erst bis zu seinem Ende und bleibt dann stehen
+      stick = Math.min(0, window.innerHeight - heroEl.offsetHeight);
+      heroEl.style.setProperty("--hero-stick", stick + "px");
+    };
+    measure();
+    window.addEventListener("resize", measure);
+
+    var lastY = window.scrollY, skew = 0, ticking = false;
+    var update = function () {
+      ticking = false;
+      var y = window.scrollY, vh = window.innerHeight;
+      // Hero tritt zurück, sobald die Bühne darüber fährt
+      var start = -stick;
+      var p = Math.min(1, Math.max(0, (y - start) / (vh * 0.9)));
+      heroInner.style.transform = "translateY(" + (p * 40).toFixed(1) + "px) scale(" + (1 - p * 0.07).toFixed(4) + ")";
+      heroInner.style.opacity = (1 - p * 0.75).toFixed(3);
+      // Abschnittsnummern bewegen sich langsamer als der Inhalt
+      numbered.forEach(function (sec) {
+        var r = sec.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) return;
+        sec.style.setProperty("--py", ((vh / 2 - (r.top + r.height / 2)) * 0.18).toFixed(1) + "px");
+      });
+      // Genre-Band kippt mit der Scroll-Geschwindigkeit
+      var v = y - lastY; lastY = y;
+      skew += (Math.max(-12, Math.min(12, v * 0.25)) - skew) * 0.25;
+      if (marqueeSkew) marqueeSkew.style.setProperty("--skew", skew.toFixed(2) + "deg");
+      if (Math.abs(skew) > 0.05) requestTick();
+    };
+    var requestTick = function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    window.addEventListener("scroll", requestTick, { passive: true });
+    update();
+
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      $$(".artist, .mix, .station .station__ph").forEach(function (card) {
+        card.classList.add("tilt");
+        card.addEventListener("pointermove", function (e) {
+          var r = card.getBoundingClientRect();
+          var x = (e.clientX - r.left) / r.width, yy = (e.clientY - r.top) / r.height;
+          card.classList.add("is-tilting");
+          card.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+          card.style.setProperty("--my", (yy * 100).toFixed(1) + "%");
+          card.style.transform = "perspective(900px) rotateX(" + ((0.5 - yy) * 7).toFixed(2) + "deg) rotateY(" + ((x - 0.5) * 9).toFixed(2) + "deg) translateY(-3px)";
+        });
+        card.addEventListener("pointerleave", function () {
+          card.classList.remove("is-tilting");
+          card.style.transform = "";
+        });
+      });
+    }
+  }
+
   /* ---------- Einblenden beim Scrollen ---------- */
   var reveals = $$(".reveal");
   if ("IntersectionObserver" in window && !reduceMotion) {
