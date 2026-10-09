@@ -91,13 +91,35 @@
         copy.setAttribute("aria-hidden", "true");
         track.appendChild(copy);
       }
-      track.style.setProperty("--shift", -w + "px");
-      track.style.setProperty("--dur", (w / 45).toFixed(1) + "s"); // ca. 45 px pro Sekunde
+      mqWidth = w;
     };
+    var mqWidth = 0;
     fillMarquee();
-    // Auf dem Handy: antippen hält das Band an, nochmal antippen lässt es weiterlaufen
+
+    // Bewegung per JavaScript statt CSS-Animation: so kann das Band beim Anhalten
+    // sanft abbremsen und danach weich wieder anlaufen, ohne zu springen.
     var marquee = $(".marquee");
-    marquee.addEventListener("click", function () { marquee.classList.toggle("is-paused"); });
+    var SPEED = 45;           // Pixel pro Sekunde
+    var mqX = 0, mqV = SPEED, mqTarget = SPEED, mqLast = 0;
+    var mqStep = function (ts) {
+      var dt = mqLast ? Math.min(0.05, (ts - mqLast) / 1000) : 0;
+      mqLast = ts;
+      mqV += (mqTarget - mqV) * Math.min(1, dt * 3);   // weiches Bremsen/Beschleunigen
+      mqX -= mqV * dt;
+      if (mqWidth && mqX <= -mqWidth) mqX += mqWidth;
+      track.style.transform = "translate3d(" + mqX.toFixed(2) + "px,0,0)";
+      requestAnimationFrame(mqStep);
+    };
+    if (!reduceMotion) requestAnimationFrame(mqStep);
+    var mqPinned = false;
+    marquee.addEventListener("mouseenter", function () { mqTarget = 0; });
+    marquee.addEventListener("mouseleave", function () { if (!mqPinned) mqTarget = SPEED; });
+    // Auf dem Handy: antippen hält das Band an, nochmal antippen lässt es weiterlaufen
+    marquee.addEventListener("click", function (e) {
+      if (e.pointerType === "mouse") return;
+      mqPinned = !mqPinned;
+      mqTarget = mqPinned ? 0 : SPEED;
+    });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fillMarquee);
     var mqTimer;
     window.addEventListener("resize", function () { clearTimeout(mqTimer); mqTimer = setTimeout(fillMarquee, 200); });
@@ -647,24 +669,8 @@
     });
   }
 
-  /* ---------- Bewegung: Genre-Band, 3D-Karten ---------- */
+  /* ---------- 3D-Karten ---------- */
   if (!reduceMotion) {
-    var marqueeSkew = $(".marquee__skew");
-
-    var lastY = window.scrollY, skew = 0, ticking = false;
-    var update = function () {
-      ticking = false;
-      var y = window.scrollY;
-      // Genre-Band kippt mit der Scroll-Geschwindigkeit
-      var v = y - lastY; lastY = y;
-      skew += (Math.max(-12, Math.min(12, v * 0.25)) - skew) * 0.25;
-      if (marqueeSkew) marqueeSkew.style.setProperty("--skew", skew.toFixed(2) + "deg");
-      if (Math.abs(skew) > 0.05) requestTick();
-    };
-    var requestTick = function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-    window.addEventListener("scroll", requestTick, { passive: true });
-    update();
-
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       $$(".artist, .mix").forEach(function (card) {
         card.classList.add("tilt");

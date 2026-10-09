@@ -150,13 +150,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
-.marquee__track { display: flex; width: max-content; animation: marquee var(--dur, 40s) linear infinite; }
-.marquee:hover .marquee__track, .marquee.is-paused .marquee__track { animation-play-state: paused; }
+.marquee__track { display: flex; width: max-content; will-change: transform; }
 .marquee__list { display: flex; align-items: center; margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: clamp(14px, 1.3vw, 16px); line-height: 1; color: #d8d8d8; }
 .marquee__list li { display: flex; align-items: center; white-space: nowrap; }
 /* Trenner: kleiner Punkt in der Akzentfarbe */
 .marquee__list li::before { content: ""; width: 5px; height: 5px; margin: 0 clamp(20px, 2.4vw, 32px); border-radius: 50%; background: var(--accent); flex: none; }
-@keyframes marquee { to { transform: translateX(var(--shift, -50%)); } }
 
 /* ---------- Sections ---------- */
 .section { padding: var(--section-y) 0; position: relative; }
@@ -555,7 +553,6 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
 .stage { overflow: clip; }
 
 /* Genre-Band reagiert auf die Scroll-Geschwindigkeit */
-.marquee__skew { transform: skewX(var(--skew, 0deg)); }
 
 /* 3D-Kippen der Karten */
 .tilt { transform-style: preserve-3d; will-change: transform; }
