@@ -164,17 +164,23 @@
     var bars = window.innerWidth < 760 ? 34 : 44;
 
     card.appendChild(el("p", "artist__no", String(idx + 1).padStart(2, "0")));
+    // Zwei gleiche Balken-Ebenen: unten gedimmt, oben hell. Die obere wird stufenlos
+    // per clip-path aufgedeckt, dadurch läuft der Fortschritt flüssig statt Balken für Balken.
     var wave = el("div", "wave");
     wave.setAttribute("aria-hidden", "true");
-    var spans = [];
+    var waveBase = el("div", "wave__layer");
+    var waveTop = el("div", "wave__layer wave__layer--played");
+    var waveHead = el("span", "wave__head");
     var phase = rand() * 6;
     for (var i = 0; i < bars; i++) {
-      var s = el("span");
       var env = 0.45 + 0.55 * Math.abs(Math.sin(i / bars * Math.PI * 1.6 + phase));
-      s.style.height = Math.max(14, Math.round((0.3 + rand() * 0.7) * env * 100)) + "%";
-      wave.appendChild(s);
-      spans.push(s);
+      var h = Math.max(14, Math.round((0.3 + rand() * 0.7) * env * 100)) + "%";
+      var b1 = el("span"); b1.style.height = h; waveBase.appendChild(b1);
+      var b2 = el("span"); b2.style.height = h; waveTop.appendChild(b2);
     }
+    wave.appendChild(waveBase);
+    wave.appendChild(waveTop);
+    wave.appendChild(waveHead);
     card.appendChild(wave);
     card.appendChild(el("h3", "artist__name", name));
 
@@ -189,23 +195,34 @@
 
     // Startzustand: ein Teil „schon gespielt“
     var base = 0.25 + rand() * 0.5;
+    var cur = base;
     function paint(p) {
-      var n = Math.round(p * spans.length);
-      for (var k = 0; k < spans.length; k++) spans[k].classList.toggle("is-on", k < n);
+      cur = p;
+      var pct = (p * 100).toFixed(2);
+      waveTop.style.clipPath = "inset(0 " + (100 - pct) + "% 0 0)";
+      waveHead.style.left = pct + "%";
     }
     paint(base);
 
-    // Hover: Wellenform „spielt“ durch
-    var raf, start;
+    // Hover: Wellenform „spielt“ gleichmäßig durch, beim Verlassen gleitet sie zurück
+    var raf, last;
     function run(ts) {
-      if (!start) start = ts;
-      var p = (base + (ts - start) / 8000) % 1;
-      paint(p);
+      if (last) paint((cur + (ts - last) / 9000) % 1);
+      last = ts;
       raf = requestAnimationFrame(run);
     }
+    function back(from, t0) {
+      return function step(ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / 600);
+        var e = 1 - Math.pow(1 - k, 3);
+        paint(from + (base - from) * e);
+        if (k < 1) raf = requestAnimationFrame(step);
+      };
+    }
     if (!reduceMotion) {
-      card.addEventListener("mouseenter", function () { start = 0; raf = requestAnimationFrame(run); });
-      card.addEventListener("mouseleave", function () { cancelAnimationFrame(raf); paint(base); });
+      card.addEventListener("mouseenter", function () { cancelAnimationFrame(raf); last = 0; raf = requestAnimationFrame(run); });
+      card.addEventListener("mouseleave", function () { cancelAnimationFrame(raf); raf = requestAnimationFrame(back(cur)); });
     }
   });
 
