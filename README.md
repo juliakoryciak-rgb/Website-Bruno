@@ -30,4 +30,4 @@ Alternativ den Ordner bei Netlify per Drag-and-drop hochladen.
 
 - Schriften liegen lokal in `assets/fonts/`, es gibt keine Verbindung zu Google Fonts.
 - SoundCloud-Player laden erst nach einem Klick auf „Player laden“ (Zwei-Klick-Lösung). Die Zustimmung merkt sich der Browser.
-- Spotify, Instagram und SoundCloud sind nur verlinkt, nicht eingebettet.
+- Instagram und SoundCloud sind nur verlinkt. Die Tracks führen zur SoundCloud-Suche.

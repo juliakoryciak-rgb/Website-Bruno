@@ -15,7 +15,7 @@
     return n;
   }
   function isPlaceholder(v) { return !v || /\[.*\]/.test(v); }
-  function spotifySearch(q) { return "https://open.spotify.com/search/" + encodeURIComponent(q); }
+  function soundcloudSearch(q) { return "https://soundcloud.com/search?q=" + encodeURIComponent(q); }
 
   // Deterministischer Zufall, damit jede Wellenform immer gleich aussieht
   function seeded(str) {
@@ -95,6 +95,9 @@
       track.style.setProperty("--dur", (w / 45).toFixed(1) + "s"); // ca. 45 px pro Sekunde
     };
     fillMarquee();
+    // Auf dem Handy: antippen hält das Band an, nochmal antippen lässt es weiterlaufen
+    var marquee = $(".marquee");
+    marquee.addEventListener("click", function () { marquee.classList.toggle("is-paused"); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fillMarquee);
     var mqTimer;
     window.addEventListener("resize", function () { clearTimeout(mqTimer); mqTimer = setTimeout(fillMarquee, 200); });
@@ -137,10 +140,10 @@
     S.setTracks.forEach(function (t, idx) {
       var li = el("li");
       var a = el("a");
-      a.href = spotifySearch(t.artist + " " + t.title);
+      a.href = soundcloudSearch(t.artist + " " + t.title);
       a.target = "_blank";
       a.rel = "noopener";
-      a.setAttribute("aria-label", t.title + " von " + t.artist + " auf Spotify anhören");
+      a.setAttribute("aria-label", t.title + " von " + t.artist + " auf SoundCloud anhören");
       a.appendChild(el("span", "nowplaying__no", String(idx + 1).padStart(2, "0")));
       var info = el("span");
       info.appendChild(el("span", "nowplaying__title", t.title));
@@ -185,12 +188,12 @@
     card.appendChild(el("h3", "artist__name", name));
 
     var t = el("a", "artist__track");
-    t.href = spotifySearch(trackName ? name + " " + trackName : name);
+    t.href = soundcloudSearch(trackName ? name + " " + trackName : name);
     t.target = "_blank";
     t.rel = "noopener";
-    t.setAttribute("aria-label", (trackName ? trackName + " von " + name : name) + " auf Spotify anhören");
+    t.setAttribute("aria-label", (trackName ? trackName + " von " + name : name) + " auf SoundCloud anhören");
     t.appendChild(el("span", "icon-play"));
-    t.appendChild(doc.createTextNode(trackName || "Auf Spotify hören"));
+    t.appendChild(doc.createTextNode(trackName || "Auf SoundCloud hören"));
     card.appendChild(t);
 
     // Startzustand: ein Teil „schon gespielt“
@@ -332,21 +335,13 @@
         try { ok = localStorage.getItem("sc-consent") === "1"; } catch (e) {}
         if (ok) embed();
       } else {
-        var pl = el("div", "mix__player");
-        var btn = el("button", "play");
-        btn.type = "button";
-        btn.appendChild(el("span", "icon-play"));
-        var bar = el("div", "mix__bar");
-        var mf = el("span", "mix__fill");
-        bar.appendChild(mf);
-        pl.appendChild(btn);
-        pl.appendChild(bar);
-        pl.appendChild(el("span", "mix__len", m.length));
-        card.appendChild(pl);
-        card.appendChild(el("p", "mix__note", (m.note ? m.note + " · " : "") + "Bald auf SoundCloud"));
-        var mp = makePlayer(card, btn, function (pr) { mf.style.width = (pr * 100).toFixed(2) + "%"; }, 45000);
-        mp.progress = [0.62, 0.36, 0.8][idx % 3];
-        mf.style.width = (mp.progress * 100) + "%";
+        // Noch kein Link: „Coming soon“ statt Player
+        card.classList.add("mix--soon");
+        var soon = el("div", "mix__soon");
+        soon.appendChild(el("span", "mix__soon-badge", "Coming soon"));
+        soon.appendChild(el("span", "mix__len", m.length));
+        card.appendChild(soon);
+        if (m.note) card.appendChild(el("p", "mix__note", m.note));
       }
       mixWrap.appendChild(card);
     });
