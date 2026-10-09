@@ -180,7 +180,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .eq span.is-hi { background: var(--accent); }
 @keyframes eq { from { transform: scaleY(.35); } to { transform: scaleY(1); } }
 
-.facts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 12px 36px; }
+.facts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, auto); justify-content: start; gap: 16px 48px; }
 .facts li { display: flex; flex-direction: column; }
 .facts__k { font-size: 11px; color: var(--dim); }
 .facts__v { font-size: 13px; }
