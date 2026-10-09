@@ -180,10 +180,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .eq span.is-hi { background: var(--accent); }
 @keyframes eq { from { transform: scaleY(.35); } to { transform: scaleY(1); } }
 
-.facts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, auto); justify-content: start; gap: 16px 48px; }
-.facts li { display: flex; flex-direction: column; }
-.facts__k { font-size: 11px; color: var(--dim); }
-.facts__v { font-size: 13px; }
 
 .bio__side { position: sticky; top: calc(var(--nav-h) + 24px); display: flex; flex-direction: column; gap: 14px; }
 .nowplaying { overflow: hidden; }
@@ -510,9 +506,6 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   .bio { grid-template-columns: 1fr; gap: 24px; }
   .bio__side { position: static; }
   .bio__photo img { aspect-ratio: 1; }
-  .facts { grid-template-columns: 1fr; gap: 0; }
-  .facts li { flex-direction: row; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
-  .facts__v { text-align: right; }
 
   .artists { gap: 10px; }
   .artist { padding: 12px 12px 14px; }
