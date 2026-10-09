@@ -593,28 +593,6 @@
     applyFader();
   }
 
-  /* ---------- Story: Pfeile zum Blättern ---------- */
-  var story = $("[data-story]");
-  if (story) {
-    $$("[data-story-step]").forEach(function (b) {
-      b.addEventListener("click", function () {
-        var dir = +b.getAttribute("data-story-step");
-        var card = story.querySelector(".station");
-        var step = card ? card.getBoundingClientRect().width + 16 : 300;
-        story.scrollBy({ left: dir * step, behavior: reduceMotion ? "auto" : "smooth" });
-      });
-    });
-    var updateArrows = function () {
-      var max = story.scrollWidth - story.clientWidth - 4;
-      $$("[data-story-step]").forEach(function (b) {
-        b.disabled = +b.getAttribute("data-story-step") < 0 ? story.scrollLeft <= 4 : story.scrollLeft >= max;
-      });
-    };
-    story.addEventListener("scroll", updateArrows, { passive: true });
-    window.addEventListener("resize", updateArrows);
-    updateArrows();
-  }
-
   /* ---------- Easter Egg: 4× aufs Logo (für die vier o's) ---------- */
   var logo = $(".nav__logo");
   var camper = $("[data-camper]");
@@ -658,7 +636,7 @@
     update();
 
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      $$(".artist, .mix, .station .station__ph").forEach(function (card) {
+      $$(".artist, .mix").forEach(function (card) {
         card.classList.add("tilt");
         card.addEventListener("pointermove", function (e) {
           var r = card.getBoundingClientRect();

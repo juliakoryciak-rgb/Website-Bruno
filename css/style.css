@@ -268,34 +268,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .hero__video { width: 100%; max-width: 460px; max-height: 660px; object-fit: cover; filter: grayscale(1) contrast(1.05); }
 
-/* ---------- Story ---------- */
+/* ---------- Pfeil-Buttons (Galerie) ---------- */
 .story__nav { display: flex; gap: 8px; }
 .story__btn { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line); font-size: 16px; transition: background-color .2s ease, opacity .2s ease, border-color .2s ease; }
 .story__btn:hover:not(:disabled) { background: var(--card-2); border-color: #444; }
 .story__btn:disabled { opacity: .3; cursor: default; }
-.story {
-  --pad: max(var(--gutter), calc((100% - var(--wrap)) / 2));
-  position: relative; list-style: none; margin: 0; padding: 30px var(--pad) 8px;
-  display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad);
-  scrollbar-width: none; overscroll-behavior-x: contain;
-}
-.story::-webkit-scrollbar { display: none; }
-.station { position: relative; flex: 0 0 clamp(240px, 26vw, 290px); scroll-snap-align: start; padding-top: 22px; }
-.station::before { content: ""; position: absolute; top: 4px; left: 0; right: -16px; height: 1px; background: var(--line); }
-.station::after { content: ""; position: absolute; top: 0; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--text); box-shadow: 0 0 0 4px var(--bg); }
-.station:last-child::before { right: 0; background: linear-gradient(90deg, var(--line), transparent); }
-.station--next::after { background: var(--accent); animation: pulse 2s infinite; }
-.station__when { margin: 0 0 12px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
-.station--next .station__when { color: var(--accent); }
-.station__ph { aspect-ratio: 4 / 5; max-width: 100%; display: grid; place-items: center; padding: 12px; border-radius: 8px; border: 1px solid var(--line-soft); background: var(--card); color: var(--dim); font-size: 11px; text-align: center; }
-.station__ph--img { padding: 0; overflow: hidden; border: 0; background: var(--card); }
-.station__ph--img img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.85); transition: filter .4s ease, transform .6s ease; }
-.station:hover .station__ph--img img { filter: saturate(1.05); transform: scale(1.03); }
-.station__badge { position: absolute; left: 10px; bottom: 10px; padding: 4px 8px; border-radius: 4px; background: #0a0a0acc; color: var(--accent); font-family: var(--mono); font-size: 10px; }
-.station--next .station__ph--img { border: 1px dashed #a8c8cc55; }
-.station--next .station__ph { border-style: dashed; border-color: #a8c8cc55; color: var(--accent); font-family: var(--mono); background: transparent; }
-.station__title { margin: 16px 0 6px; font-size: 17px; font-weight: 500; }
-.station__text { margin: 0; font-size: 13px; color: #bdbdbd; }
 
 /* ---------- Camper (Easter Egg) ---------- */
 .camper[hidden] { display: none; }
@@ -518,7 +495,6 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   .gigs__list { grid-template-columns: 1fr; }
   .fader { margin-bottom: 22px; }
   .story__nav { display: none; }
-  .station { flex-basis: 78%; }
   .sound__words { width: 100%; }
 
   .gigs { grid-template-columns: 1fr; gap: 20px; }
@@ -562,8 +538,8 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   transition: opacity .3s ease;
 }
 .tilt.is-tilting::before { opacity: 1; }
-.artist, .mix, .station__ph { position: relative; }
-.mix.tilt, .station__ph.tilt { transition: transform .2s ease-out; }
+.artist, .mix { position: relative; }
+.mix.tilt { transition: transform .2s ease-out; }
 
 @media (max-width: 760px) {
 }
