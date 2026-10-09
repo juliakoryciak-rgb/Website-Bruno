@@ -33,6 +33,8 @@ window.SITE = {
     { title: "Pick Up the Phone", artist: "Pawsa" },
     { title: "Marea", artist: "Fred again.." },
     { title: "Shinjuku", artist: "Franky Rizardo" },
+    { title: "Stay Sexy", artist: "HUGEL" },
+    { title: "So Much in Love", artist: "Gerber" },
   ],
   setTracksUpdated: "Oktober 2026",
 
