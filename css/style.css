@@ -146,14 +146,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- Marquee ---------- */
 .marquee {
   position: relative; overflow: hidden; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
-  background: var(--bg-2); padding: 18px 0;
+  background: var(--bg-2); padding: 22px 0;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 .marquee__track { display: flex; width: max-content; animation: marquee var(--dur, 40s) linear infinite; }
-.marquee__list { display: flex; margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: 13px; color: #cfcfcf; }
-.marquee__list li { white-space: nowrap; }
-.marquee__list li::before { content: "/"; color: var(--dim); margin: 0 30px; }
+.marquee__list { display: flex; align-items: center; margin: 0; padding: 0; list-style: none; font-size: clamp(20px, 2.4vw, 30px); letter-spacing: -.02em; line-height: 1; color: var(--text); }
+.marquee__list li { display: flex; align-items: center; white-space: nowrap; }
+/* Trenner: kleiner Punkt in der Akzentfarbe */
+.marquee__list li::before { content: ""; width: 7px; height: 7px; margin: 0 clamp(20px, 2.6vw, 36px); border-radius: 50%; background: var(--accent); flex: none; }
+/* Jedes zweite Genre nur als Umriss */
+.marquee__list li:nth-child(even) { color: transparent; -webkit-text-stroke: 1px #cfcfcf; }
 @keyframes marquee { to { transform: translateX(var(--shift, -50%)); } }
 
 /* ---------- Sections ---------- */
@@ -173,6 +176,25 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ---------- Bio ---------- */
 .bio { display: grid; grid-template-columns: 160px minmax(0, 1fr) 300px; gap: 40px 48px; align-items: start; }
+/* Bio als Kapitel */
+.chapters { display: flex; flex-direction: column; gap: 30px; }
+.chapter p:last-child { margin-bottom: 0; }
+.chapter__kicker { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-family: var(--mono); font-size: 11px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.chapter__kicker::after { content: ""; flex: 1; max-width: 80px; height: 1px; background: #a8c8cc40; }
+.motto { margin: 26px 0 0; padding: 4px 0 4px 20px; border-left: 2px solid var(--accent); }
+.bio__text .motto p { margin: 0; max-width: 24ch; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.25; letter-spacing: -.015em; color: var(--text); text-wrap: balance; }
+.bio__more-inner { padding-top: 30px; }
+
+/* Aufklappen (nur mit JavaScript, sonst steht alles da) */
+.js .bio__more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .7s cubic-bezier(.16, 1, .3, 1); }
+.js .bio__more > .bio__more-inner { min-height: 0; overflow: hidden; opacity: 0; transition: opacity .5s ease; }
+.js .bio.is-open .bio__more { grid-template-rows: 1fr; }
+.js .bio.is-open .bio__more > .bio__more-inner { opacity: 1; transition-delay: .1s; }
+.js .bio:not(.is-open) .chapters--intro { -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
+.bio__toggle { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 10px 18px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; transition: border-color .2s ease, color .2s ease; }
+.bio__toggle:hover { border-color: var(--accent); color: var(--accent); }
+.bio__toggle-icon { display: inline-block; transition: transform .4s ease; }
+.bio.is-open .bio__toggle-icon { transform: rotate(180deg); }
 .bio__text p { margin: 0 0 18px; color: #c4c4c4; font-size: 14px; max-width: 60ch; }
 .bio__text .lead { color: var(--text); font-size: clamp(17px, 1.6vw, 19px); line-height: 1.5; margin-bottom: 30px; }
 

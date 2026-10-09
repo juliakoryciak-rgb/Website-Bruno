@@ -100,6 +100,24 @@
     window.addEventListener("resize", function () { clearTimeout(mqTimer); mqTimer = setTimeout(fillMarquee, 200); });
   }
 
+  /* ---------- Bio: Rest der Geschichte aufklappen ---------- */
+  var bioToggle = $("[data-bio-toggle]");
+  if (bioToggle) {
+    var bio = $(".bio");
+    var bioLabel = $("[data-bio-toggle-label]", bioToggle);
+    bioToggle.hidden = false;
+    bioToggle.addEventListener("click", function () {
+      var open = !bio.classList.contains("is-open");
+      bio.classList.toggle("is-open", open);
+      bioToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      bioLabel.textContent = open ? "Weniger anzeigen" : "Ganze Geschichte lesen";
+      // Beim Zuklappen zurück an den Anfang der Bio
+      if (!open && bio.getBoundingClientRect().top < 0) {
+        $("#bio").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+      }
+    });
+  }
+
   /* ---------- Equalizer (Bio) ---------- */
   var eq = $(".eq");
   if (eq) {
