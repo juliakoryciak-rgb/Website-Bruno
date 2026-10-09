@@ -146,17 +146,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- Marquee ---------- */
 .marquee {
   position: relative; overflow: hidden; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
-  background: var(--bg-2); padding: 22px 0;
+  background: var(--bg-2); padding: 20px 0;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 .marquee__track { display: flex; width: max-content; animation: marquee var(--dur, 40s) linear infinite; }
-.marquee__list { display: flex; align-items: center; margin: 0; padding: 0; list-style: none; font-size: clamp(20px, 2.4vw, 30px); letter-spacing: -.02em; line-height: 1; color: var(--text); }
+.marquee__list { display: flex; align-items: center; margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: clamp(14px, 1.3vw, 16px); line-height: 1; color: #d8d8d8; }
 .marquee__list li { display: flex; align-items: center; white-space: nowrap; }
 /* Trenner: kleiner Punkt in der Akzentfarbe */
-.marquee__list li::before { content: ""; width: 7px; height: 7px; margin: 0 clamp(20px, 2.6vw, 36px); border-radius: 50%; background: var(--accent); flex: none; }
-/* Jedes zweite Genre nur als Umriss */
-.marquee__list li:nth-child(even) { color: transparent; -webkit-text-stroke: 1px #cfcfcf; }
+.marquee__list li::before { content: ""; width: 5px; height: 5px; margin: 0 clamp(20px, 2.4vw, 32px); border-radius: 50%; background: var(--accent); flex: none; }
 @keyframes marquee { to { transform: translateX(var(--shift, -50%)); } }
 
 /* ---------- Sections ---------- */
