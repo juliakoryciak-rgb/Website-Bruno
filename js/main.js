@@ -199,7 +199,7 @@
     var raf, start;
     function run(ts) {
       if (!start) start = ts;
-      var p = (base + (ts - start) / 2600) % 1;
+      var p = (base + (ts - start) / 8000) % 1;
       paint(p);
       raf = requestAnimationFrame(run);
     }
