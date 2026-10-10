@@ -318,9 +318,21 @@
   var mixWrap = $("[data-mixes]");
   var scEmbeds = [];
   if (mixWrap && S.mixes) {
+    var ICON = {
+      prev: '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M11 7v10l-7-5zM20 7v10l-7-5z"/></svg>',
+      next: '<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M4 7v10l7-5zM13 7v10l7-5z"/></svg>',
+      play: '<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M7 5v14l12-7z"/></svg>',
+      pause: '<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+      more: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>'
+    };
+    var fmtTime = function (sec) {
+      sec = Math.max(0, Math.floor(sec));
+      return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
+    };
     S.mixes.forEach(function (m, idx) {
-      // Quadratische Kachel wie ein Plattencover, darunter Name und Beschreibung
+      // Aufbau wie ein „Jetzt läuft“-Bildschirm: Cover, Titel, Fortschritt, Tasten
       var card = el("article", "mix reveal");
+      if (m.cover) card.style.setProperty("--cover", "url('" + m.cover + "')");
 
       var cover = el("div", "mix__cover");
       if (m.cover) {
@@ -338,16 +350,74 @@
         ph.appendChild(el("span", "mix__ph-text", "Cover folgt"));
         cover.appendChild(ph);
       }
-      var play = el("span", "mix__play");
-      play.setAttribute("aria-hidden", "true");
-      play.appendChild(el("span", "icon-play"));
-      cover.appendChild(play);
       if (!m.soundcloud) cover.appendChild(el("span", "mix__soon-badge", "Coming soon"));
       card.appendChild(cover);
 
-      var info = el("div", "mix__info");
-      info.appendChild(el("h3", "mix__title", m.title));
-      card.appendChild(info);
+      var head = el("div", "mix__head");
+      var titles = el("div", "mix__titles");
+      titles.appendChild(el("h3", "mix__title", m.title));
+      titles.appendChild(el("p", "mix__artist", "brunoooo.mp3"));
+      head.appendChild(titles);
+      var more = el("span", "mix__more");
+      more.setAttribute("aria-hidden", "true");
+      more.innerHTML = ICON.more;
+      head.appendChild(more);
+      card.appendChild(head);
+
+      // Länge in Sekunden für die Zeitanzeige (aus „60–90 min“ wird 60 min)
+      var total = (parseInt(m.length, 10) || 60) * 60;
+      var startP = [0.38, 0.62, 0.22][idx % 3];
+
+      var prog = el("div", "mix__progress");
+      prog.setAttribute("aria-hidden", "true");
+      var bar = el("div", "mix__bar");
+      var fill = el("span", "mix__fill");
+      bar.appendChild(fill);
+      prog.appendChild(bar);
+      var times = el("div", "mix__times");
+      var tNow = el("span", "", fmtTime(total * startP));
+      var tLeft = el("span", "", "-" + fmtTime(total * (1 - startP)));
+      times.appendChild(tNow);
+      times.appendChild(tLeft);
+      prog.appendChild(times);
+      card.appendChild(prog);
+
+      var ctrls = el("div", "mix__controls");
+      ctrls.setAttribute("aria-hidden", "true");
+      ctrls.innerHTML = '<span class="mix__ctrl">' + ICON.prev + '</span><span class="mix__ctrl mix__ctrl--play">' + ICON.play + '</span><span class="mix__ctrl">' + ICON.next + '</span>';
+      card.appendChild(ctrls);
+
+      var foot = el("div", "mix__foot");
+      foot.appendChild(el("span", "", "© brunoooo.mp3"));
+      foot.appendChild(el("span", "", m.soundcloud ? "SoundCloud" : "Bald auf SoundCloud"));
+      card.appendChild(foot);
+
+      // Beim Drüberfahren „läuft“ der Mix: Balken wächst, Zeit zählt weiter
+      var cur = startP, raf, last;
+      var playIcon = $(".mix__ctrl--play", ctrls);
+      var paint = function (p) {
+        cur = p;
+        fill.style.transform = "scaleX(" + p.toFixed(4) + ")";
+        tNow.textContent = fmtTime(total * p);
+        tLeft.textContent = "-" + fmtTime(total * (1 - p));
+      };
+      paint(startP);
+      var run = function (ts) {
+        if (last) paint((cur + (ts - last) / 1000 / total) % 1);
+        last = ts;
+        raf = requestAnimationFrame(run);
+      };
+      if (!reduceMotion) {
+        card.addEventListener("mouseenter", function () {
+          cancelAnimationFrame(raf); last = 0; card.classList.add("is-playing");
+          playIcon.innerHTML = ICON.pause;
+          raf = requestAnimationFrame(run);
+        });
+        card.addEventListener("mouseleave", function () {
+          cancelAnimationFrame(raf); card.classList.remove("is-playing");
+          playIcon.innerHTML = ICON.play;
+        });
+      }
 
       if (m.soundcloud) {
         // Zwei-Klick-Lösung: SoundCloud lädt erst nach Zustimmung (Datenschutz)

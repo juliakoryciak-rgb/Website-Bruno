@@ -326,34 +326,41 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 a.artist__track:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- Mixes ---------- */
-.mixes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 780px; margin-inline: auto; }
-.mix { min-width: 0; }
-.mix__cover { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: #0e0e0e; }
-.mix__cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.16, 1, .3, 1); }
-.mix:hover .mix__cover img { transform: scale(1.04); }
-.mix__cover--empty { display: grid; place-items: center; background: linear-gradient(135deg, #1b1d1f, #121314); border: 1px dashed #2c2e30; }
-.mix__ph { display: flex; flex-direction: column; align-items: center; gap: 10px; color: #55595c; }
+.mixes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 900px; margin-inline: auto; }
+/* „Jetzt läuft“-Karte, angelehnt an einen Musik-Player */
+.mix {
+  position: relative; min-width: 0; overflow: hidden; display: flex; flex-direction: column; gap: 14px;
+  padding: 16px 16px 14px; border-radius: 18px;
+  background: linear-gradient(180deg, #2a2c2f, #1e1f22); border: 1px solid #ffffff0f;
+  box-shadow: 0 20px 50px #0007;
+}
+/* Mit echtem Cover: verschwommenes Cover als Hintergrund, wie bei Apple Music */
+.mix::before { content: ""; position: absolute; inset: -30px; z-index: 0; background: var(--cover, none) center / cover; filter: blur(40px) saturate(1.2); opacity: .55; }
+.mix::after { content: ""; position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, #0000, #000a); }
+.mix > * { position: relative; z-index: 1; }
+.mix__cover { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: #111; box-shadow: 0 12px 30px #0008; transition: transform .6s cubic-bezier(.16, 1, .3, 1); }
+.mix:hover .mix__cover { transform: scale(1.02); }
+.mix__cover img { width: 100%; height: 100%; object-fit: cover; }
+.mix__cover--empty { display: grid; place-items: center; background: linear-gradient(135deg, #34363a, #222326); }
+.mix__ph { display: flex; flex-direction: column; align-items: center; gap: 10px; color: #8a8e93; }
 .mix__ph-text { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
-.vinyl {
-  width: 62%; aspect-ratio: 1; border-radius: 50%;
-  background: repeating-radial-gradient(circle, #0b0b0b 0 2px, #151515 2px 3px);
-  display: grid; place-items: center; box-shadow: 0 10px 30px #000a;
-  animation: spin 4s linear infinite paused;
-}
-.vinyl::after { content: ""; width: 34%; height: 34%; border-radius: 50%; background: radial-gradient(circle, #0d1516 0 6%, var(--accent) 8%); }
-.mix:hover .vinyl { animation-play-state: running; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.mix__play {
-  position: absolute; right: 14px; bottom: 14px; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
-  background: var(--accent); color: var(--accent-ink); opacity: 0; transform: translateY(8px);
-  transition: opacity .35s ease, transform .35s cubic-bezier(.16, 1, .3, 1);
-}
-.mix__play .icon-play { margin-left: 3px; }
-.mix:hover .mix__play { opacity: 1; transform: none; }
-.mix__soon-badge { position: absolute; left: 12px; top: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border-radius: 999px; background: #0a0a0acc; font-family: var(--mono); font-size: 10px; color: var(--accent); }
+.mix__soon-badge { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border-radius: 999px; background: #0a0a0acc; font-family: var(--mono); font-size: 10px; color: var(--accent); }
 .mix__soon-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-.mix__info { padding-top: 14px; }
-.mix__title { margin: 0; font-size: 16px; font-weight: 400; }
+.mix__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mix__titles { min-width: 0; }
+.mix__title { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.25; }
+.mix__artist { margin: 2px 0 0; font-size: 14px; color: #c9cbce; }
+.mix__more { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: #ffffff1a; color: #e6e6e6; }
+.mix__progress { display: flex; flex-direction: column; gap: 6px; }
+.mix__bar { height: 5px; border-radius: 3px; background: #ffffff26; overflow: hidden; }
+.mix__fill { display: block; height: 100%; background: #e6e6e6; transform-origin: left; transform: scaleX(0); transition: background-color .3s ease; }
+.mix.is-playing .mix__fill { background: var(--accent); }
+.mix__times { display: flex; justify-content: space-between; font-size: 11px; color: #a9acb0; font-variant-numeric: tabular-nums; }
+.mix__controls { display: flex; align-items: center; justify-content: center; gap: 30px; color: #e6e6e6; padding: 2px 0; }
+.mix__ctrl { display: grid; place-items: center; opacity: .9; }
+.mix__ctrl--play { width: 46px; height: 46px; border-radius: 50%; transition: background-color .3s ease, color .3s ease; }
+.mix.is-playing .mix__ctrl--play { background: var(--accent); color: var(--accent-ink); }
+.mix__foot { display: flex; justify-content: space-between; gap: 10px; font-size: 9px; letter-spacing: .06em; text-transform: uppercase; color: #8f9296; }
 .sc-gate { margin-top: 12px; padding: 12px; border: 1px dashed var(--line); border-radius: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .sc-gate__text { margin: 0; font-size: 11px; color: var(--muted); }
 .mix iframe { width: 100%; height: 166px; border: 0; border-radius: 6px; margin-top: 12px; }
@@ -423,6 +430,7 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   transition: background-size .35s ease, color .2s ease;
 }
 .booking__mail:hover { color: var(--accent); background-size: 100% 1px; }
+.booking__note { margin: 16px 0 0; max-width: 46ch; color: var(--muted); font-size: 14px; text-wrap: balance; }
 .booking__mailrow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 16px; margin-top: 22px; }
 .booking__mailrow .booking__mail { margin-top: 0; }
 
@@ -520,8 +528,7 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   /* Mixes auf dem Handy: seitlich wischbar */
   .mixes { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter); scroll-padding-inline: var(--gutter); scrollbar-width: none; }
   .mixes::-webkit-scrollbar { display: none; }
-  .mix { flex: 0 0 58%; scroll-snap-align: start; }
-  .mix__play { opacity: 1; transform: none; width: 40px; height: 40px; }
+  .mix { flex: 0 0 74%; scroll-snap-align: start; }
   .modes { grid-template-columns: 1fr; }
   .gigs__list { grid-template-columns: 1fr; }
   .fader { margin-bottom: 22px; }
