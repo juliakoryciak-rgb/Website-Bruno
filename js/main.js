@@ -330,10 +330,13 @@
         ci.loading = "lazy";
         cover.appendChild(ci);
       } else {
+        // Platzhalter, bis das echte Cover da ist
         cover.classList.add("mix__cover--empty");
-        var v = el("div", "vinyl");
-        v.setAttribute("aria-hidden", "true");
-        cover.appendChild(v);
+        var ph = el("div", "mix__ph");
+        ph.setAttribute("aria-hidden", "true");
+        ph.innerHTML = '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 16l-5-5-9 9"/></svg>';
+        ph.appendChild(el("span", "mix__ph-text", "Cover folgt"));
+        cover.appendChild(ph);
       }
       var play = el("span", "mix__play");
       play.setAttribute("aria-hidden", "true");
