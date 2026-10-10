@@ -11,6 +11,7 @@
   --bg-2: #0e0e0e;
   --card: #131313;
   --card-2: #181818;
+  --panel: #111214;
   --line: #222;
   --line-soft: #1a1a1a;
   --text: #ededed;
@@ -163,6 +164,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   width: min(calc(100% - 2 * var(--gutter)), calc(var(--wrap) + 80px)); height: 1px;
   background: linear-gradient(to right, transparent, var(--line), transparent);
 }
+/* Hellere Container für einzelne Abschnitte */
+.section--panel {
+  margin-inline: clamp(8px, 2vw, 28px); border-radius: 28px;
+  background: var(--panel); border: 1px solid var(--line-soft);
+}
+.section--panel::before, .section--panel + .section::before { display: none; }
+.section--panel .card { background: var(--card-2); }
 .section__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 40px; }
 .section__head--row { align-items: center; }
 .section__aside { margin: 0; max-width: 300px; color: var(--muted); font-size: 13px; }
