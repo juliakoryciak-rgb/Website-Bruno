@@ -319,16 +319,33 @@
   var scEmbeds = [];
   if (mixWrap && S.mixes) {
     S.mixes.forEach(function (m, idx) {
+      // Aufbau wie ein Player: Cover | Titel, Wellenform, Infos | Play-Button
       var card = el("article", "card mix reveal");
-      var top = el("div", "mix__top");
-      var head = el("div");
-      head.appendChild(el("p", "mix__no", "Mix " + String(idx + 1).padStart(2, "0")));
-      head.appendChild(el("h3", "mix__title", m.title));
-      top.appendChild(head);
-      var vinyl = el("div", "vinyl");
-      vinyl.setAttribute("aria-hidden", "true");
-      top.appendChild(vinyl);
-      card.appendChild(top);
+
+      var cover = el("div", "mix__cover");
+      if (m.cover) {
+        var ci = el("img");
+        ci.src = m.cover;
+        ci.alt = "Cover: " + m.title;
+        ci.loading = "lazy";
+        cover.appendChild(ci);
+      } else {
+        cover.classList.add("mix__cover--empty");
+        var v = el("div", "vinyl");
+        v.setAttribute("aria-hidden", "true");
+        cover.appendChild(v);
+        cover.appendChild(el("span", "mix__cover-note", "Cover folgt"));
+      }
+      card.appendChild(cover);
+
+      var body = el("div", "mix__body");
+      var head = el("div", "mix__head");
+      var titles = el("div");
+      titles.appendChild(el("p", "mix__artist", "brunoooo.mp3"));
+      titles.appendChild(el("h3", "mix__title", m.title));
+      head.appendChild(titles);
+      body.appendChild(head);
+      card.appendChild(body);
 
       if (m.soundcloud) {
         // Zwei-Klick-Lösung: SoundCloud lädt erst nach Zustimmung (Datenschutz)
@@ -337,14 +354,14 @@
         var load = el("button", "btn btn--ghost btn--sm", "Player laden");
         load.type = "button";
         gate.appendChild(load);
-        card.appendChild(gate);
+        body.appendChild(gate);
         var embed = function () {
           var f = doc.createElement("iframe");
           f.loading = "lazy";
           f.allow = "autoplay";
           f.title = "SoundCloud-Player: " + m.title;
           f.src = "https://w.soundcloud.com/player/?url=" + encodeURIComponent(m.soundcloud) +
-            "&color=%23a8c8cc&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false";
+            "&color=%23a8c8cc&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false";
           gate.replaceWith(f);
         };
         // Ein Klick lädt alle Player auf der Seite
@@ -357,13 +374,55 @@
         try { ok = localStorage.getItem("sc-consent") === "1"; } catch (e) {}
         if (ok) embed();
       } else {
-        // Noch kein Link: „Coming soon“ statt Player
+        // Noch kein Link: Player-Ansicht mit „Coming soon“
         card.classList.add("mix--soon");
-        var soon = el("div", "mix__soon");
-        soon.appendChild(el("span", "mix__soon-badge", "Coming soon"));
-        soon.appendChild(el("span", "mix__len", m.length));
-        card.appendChild(soon);
-        if (m.note) card.appendChild(el("p", "mix__note", m.note));
+        head.appendChild(el("span", "mix__soon-badge", "Coming soon"));
+
+        var wave = el("div", "mix__wave");
+        wave.setAttribute("aria-hidden", "true");
+        var base = el("div", "wave__layer");
+        var top = el("div", "wave__layer wave__layer--played");
+        var headLine = el("span", "wave__head");
+        var rnd = seeded(m.title + idx);
+        var n = window.innerWidth < 760 ? 48 : 96;
+        for (var i = 0; i < n; i++) {
+          var env = 0.4 + 0.6 * Math.abs(Math.sin(i / n * Math.PI * 2.2 + idx));
+          var h = Math.max(12, Math.round((0.35 + rnd() * 0.65) * env * 100)) + "%";
+          var a1 = el("span"); a1.style.height = h; base.appendChild(a1);
+          var a2 = el("span"); a2.style.height = h; top.appendChild(a2);
+        }
+        wave.appendChild(base);
+        wave.appendChild(top);
+        wave.appendChild(headLine);
+        body.appendChild(wave);
+
+        var meta = el("div", "mix__meta");
+        meta.appendChild(el("span", "mix__note", m.note || ""));
+        meta.appendChild(el("span", "mix__len", m.length));
+        body.appendChild(meta);
+
+        var play = el("span", "mix__play");
+        play.setAttribute("aria-hidden", "true");
+        play.appendChild(el("span", "icon-play"));
+        card.appendChild(play);
+
+        // Zeigt, wie es beim Abspielen aussieht: beim Drüberfahren läuft die Wellenform weich durch
+        var startP = [0.32, 0.58, 0.18][idx % 3], cur = startP, raf, last;
+        var paint = function (p) {
+          cur = p;
+          top.style.clipPath = "inset(0 " + (100 - p * 100).toFixed(2) + "% 0 0)";
+          headLine.style.left = (p * 100).toFixed(2) + "%";
+        };
+        paint(startP);
+        var run = function (ts) {
+          if (last) paint((cur + (ts - last) / 30000) % 1);
+          last = ts;
+          raf = requestAnimationFrame(run);
+        };
+        if (!reduceMotion) {
+          card.addEventListener("mouseenter", function () { cancelAnimationFrame(raf); last = 0; card.classList.add("is-playing"); raf = requestAnimationFrame(run); });
+          card.addEventListener("mouseleave", function () { cancelAnimationFrame(raf); card.classList.remove("is-playing"); });
+        }
       }
       mixWrap.appendChild(card);
     });
@@ -647,7 +706,7 @@
   /* ---------- 3D-Karten ---------- */
   if (!reduceMotion) {
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      $$(".artist, .mix").forEach(function (card) {
+      $$(".artist").forEach(function (card) {
         card.classList.add("tilt");
         card.addEventListener("pointermove", function (e) {
           var r = card.getBoundingClientRect();

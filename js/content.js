@@ -38,12 +38,12 @@ window.SITE = {
   ],
   setTracksUpdated: "Oktober 2026",
 
-  // Mixes: „soundcloud“ = Link zum Mix auf SoundCloud.
-  // Sobald ein Link drinsteht, erscheint automatisch der echte SoundCloud-Player.
+  // Mixes: title = Name des Mixes, cover = Bild (z. B. "assets/img/mixes/mix-1.jpg", quadratisch),
+  // soundcloud = Link zum Mix. Sobald ein Link drinsteht, erscheint automatisch der echte SoundCloud-Player.
   mixes: [
-    { title: "Warm-up / Deep", length: "60–90 min", note: "Ruhiger Einstieg in den Abend", soundcloud: "" },
-    { title: "Peak Time",      length: "60–90 min", note: "So klingt es um 1 Uhr nachts",  soundcloud: "" },
-    { title: "Signature",      length: "60–90 min", note: "Klingt am meisten nach ihm",    soundcloud: "" },
+    { title: "Warm-up / Deep", length: "60–90 min", note: "Ruhiger Einstieg in den Abend", cover: "", soundcloud: "" },
+    { title: "Peak Time",      length: "60–90 min", note: "So klingt es um 1 Uhr nachts",  cover: "", soundcloud: "" },
+    { title: "Signature",      length: "60–90 min", note: "Klingt am meisten nach ihm",    cover: "", soundcloud: "" },
   ],
 
   // Gigs

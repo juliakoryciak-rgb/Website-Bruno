@@ -321,34 +321,41 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 a.artist__track:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- Mixes ---------- */
-.mixes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.mix { padding: 20px; display: flex; flex-direction: column; min-height: 220px; }
-.mix__top { display: flex; justify-content: space-between; gap: 16px; }
-.mix__no { margin: 0; font-size: 10px; color: var(--muted); }
-.mix__title { margin: 6px 0 0; font-size: 18px; font-weight: 400; }
+.mixes { display: flex; flex-direction: column; gap: 12px; }
+.mix { display: grid; grid-template-columns: 132px minmax(0, 1fr) 56px; align-items: center; gap: 24px; padding: 16px 24px 16px 16px; }
+.mix__cover { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--card-2); }
+.mix__cover img { width: 100%; height: 100%; object-fit: cover; }
+.mix__cover--empty { display: grid; place-items: center; background: radial-gradient(circle at 30% 25%, #a8c8cc22, transparent 60%), #0e0e0e; border: 1px solid var(--line-soft); }
+.mix__cover-note { position: absolute; left: 8px; bottom: 6px; font-family: var(--mono); font-size: 9px; color: var(--dim); }
 .vinyl {
-  flex: none; width: 58px; height: 58px; border-radius: 50%;
-  background: repeating-radial-gradient(circle, #0b0b0b 0 2px, #121212 2px 3px);
+  width: 64%; aspect-ratio: 1; border-radius: 50%;
+  background: repeating-radial-gradient(circle, #0b0b0b 0 2px, #141414 2px 3px);
   display: grid; place-items: center; border: 1px solid #1e1e1e;
-  animation: spin 2.4s linear infinite paused;
+  animation: spin 3s linear infinite paused;
 }
-.vinyl::after { content: ""; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle, #ddd 0 1.5px, #2a2a2a 2px); }
+.vinyl::after { content: ""; width: 34%; height: 34%; border-radius: 50%; background: radial-gradient(circle, #0d1516 0 6%, var(--accent) 8%); }
 .mix.is-playing .vinyl { animation-play-state: running; }
-.mix.is-playing .vinyl::after { background: radial-gradient(circle, #0d1516 0 1.5px, var(--accent) 2px); }
 @keyframes spin { to { transform: rotate(360deg); } }
-.mix__player { display: flex; align-items: center; gap: 10px; margin-top: 28px; }
-.mix__player .play { margin-left: -6px; }
-.mix__bar { flex: 1; height: 2px; background: #2c2c2c; border-radius: 2px; overflow: hidden; }
-.mix__fill { display: block; height: 100%; width: 0; background: #d6d6d6; }
-.mix.is-playing .mix__fill { background: var(--accent); }
-.mix__len { font-size: 10px; color: var(--muted); white-space: nowrap; }
-.mix__soon { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px; padding-top: 16px; border-top: 1px dashed var(--line); }
-.mix__soon-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--accent); }
+.mix__body { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.mix__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.mix__artist { margin: 0; font-size: 11px; color: var(--muted); }
+.mix__title { margin: 2px 0 0; font-size: 19px; font-weight: 400; }
+.mix__wave { position: relative; height: 54px; }
+.mix__wave .wave__layer { gap: 2px; }
+.mix.is-playing .wave__layer--played span { background: var(--accent); }
+.mix.is-playing .wave__head { opacity: .9; }
+.mix__meta { display: flex; justify-content: space-between; gap: 12px; }
+.mix__note { margin: 0; font-size: 11px; color: var(--muted); }
+.mix__len { font-size: 11px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mix__play { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); color: var(--dim); transition: border-color .3s ease, color .3s ease, background-color .3s ease; }
+.mix__play .icon-play { margin-left: 3px; }
+.mix.is-playing .mix__play { border-color: var(--accent); color: var(--accent); }
+.mix__soon { display: none; }
+.mix__soon-badge { display: inline-flex; align-items: center; gap: 8px; flex: none; font-family: var(--mono); font-size: 11px; color: var(--accent); }
 .mix__soon-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-.mix__note { margin: auto 0 0; padding-top: 28px; font-size: 10px; color: var(--dim); }
-.sc-gate { margin-top: 20px; padding: 16px; border: 1px dashed var(--line); border-radius: 8px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.sc-gate { margin-top: 4px; padding: 14px; border: 1px dashed var(--line); border-radius: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .sc-gate__text { margin: 0; font-size: 11px; color: var(--muted); }
-.mix iframe { width: 100%; height: 166px; border: 0; border-radius: 6px; margin-top: 20px; }
+.mix iframe { width: 100%; height: 166px; border: 0; border-radius: 6px; }
 
 /* ---------- Gigs ---------- */
 .gigs { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 40px 48px; }
@@ -465,8 +472,6 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   .bio__label { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; }
   .bio__label .eq { margin: 0; }
   .artists { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .mixes { grid-template-columns: 1fr 1fr; }
-  .mixes > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 
 @media (max-width: 760px) {
@@ -511,8 +516,12 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   .wave__layer { gap: 1.5px; }
   .artist__name { font-size: 15px; }
 
-  .mixes { grid-template-columns: 1fr; }
-  .mix { min-height: 0; }
+  .mix { grid-template-columns: 76px minmax(0, 1fr); gap: 14px; padding: 12px; }
+  .mix__play { display: none; }
+  .mix__cover-note { display: none; }
+  .mix__title { font-size: 16px; }
+  .mix__wave { height: 40px; }
+  .mix__wave .wave__layer { gap: 1.5px; }
   .modes { grid-template-columns: 1fr; }
   .gigs__list { grid-template-columns: 1fr; }
   .fader { margin-bottom: 22px; }
@@ -558,8 +567,7 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   transition: opacity .3s ease;
 }
 .tilt.is-tilting::before { opacity: 1; }
-.artist, .mix { position: relative; }
-.mix.tilt { transition: transform .2s ease-out; }
+.artist { position: relative; }
 
 @media (max-width: 760px) {
 }
