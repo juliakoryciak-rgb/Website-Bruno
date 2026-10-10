@@ -41,9 +41,9 @@ window.SITE = {
   // Mixes: title = Name des Mixes, cover = Bild (z. B. "assets/img/mixes/mix-1.jpg", quadratisch),
   // soundcloud = Link zum Mix. Sobald ein Link drinsteht, erscheint automatisch der echte SoundCloud-Player.
   mixes: [
-    { title: "Warm-up / Deep", length: "60–90 min", note: "Ruhiger Einstieg in den Abend", cover: "", soundcloud: "" },
-    { title: "Peak Time",      length: "60–90 min", note: "So klingt es um 1 Uhr nachts",  cover: "", soundcloud: "" },
-    { title: "Signature",      length: "60–90 min", note: "Klingt am meisten nach ihm",    cover: "", soundcloud: "" },
+    { title: "Daydrinking / Sundowner", length: "60–90 min", note: "Entspannter House für Sonne und Sonnenuntergang", cover: "", soundcloud: "" },
+    { title: "Club-Hits / 90s & 2000s", length: "60–90 min", note: "Zum Mitsingen und Durchtanzen", cover: "", soundcloud: "" },
+    { title: "House Set / Party Time", length: "60–90 min", note: "Wenn der Floor richtig voll ist", cover: "", soundcloud: "" },
   ],
 
   // Gigs

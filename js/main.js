@@ -676,6 +676,65 @@
     }
   }
 
+  /* ---------- Lebendigkeit: Fortschrittsbalken, Lichtschein, Galerie-Drift ---------- */
+  var bar = $(".scrollbar");
+  if (bar) {
+    var setProgress = function () {
+      var max = doc.documentElement.scrollHeight - window.innerHeight;
+      bar.style.setProperty("--progress", max > 0 ? (window.scrollY / max).toFixed(4) : 0);
+    };
+    setProgress();
+    window.addEventListener("scroll", setProgress, { passive: true });
+    window.addEventListener("resize", setProgress);
+  }
+
+  if (!reduceMotion) {
+    // Filmkorn
+    var grain = el("div", "grain");
+    grain.setAttribute("aria-hidden", "true");
+    doc.body.appendChild(grain);
+
+    // Lichtschein in den hellen Containern (nur mit Maus)
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      $$(".section--panel").forEach(function (panel) {
+        panel.addEventListener("pointermove", function (e) {
+          var r = panel.getBoundingClientRect();
+          panel.style.setProperty("--mx", (e.clientX - r.left) + "px");
+          panel.style.setProperty("--my", (e.clientY - r.top) + "px");
+          panel.classList.add("is-lit");
+        });
+        panel.addEventListener("pointerleave", function () { panel.classList.remove("is-lit"); });
+      });
+    }
+
+    // Galerie gleitet langsam von selbst, hält bei Maus oder Berührung an
+    var gal = $("[data-gallery]");
+    if (gal) {
+      var dir = 1, hold = 0, galLast = 0, galAcc = 0;
+      var pause = function () { hold = performance.now() + 4000; };
+      gal.addEventListener("pointerenter", function () { hold = Infinity; });
+      gal.addEventListener("pointerleave", function () { hold = performance.now() + 800; });
+      ["touchstart", "wheel", "keydown"].forEach(function (ev) { gal.addEventListener(ev, pause, { passive: true }); });
+      $$("[data-gal-step]").forEach(function (b) { b.addEventListener("click", pause); });
+      var drift = function (ts) {
+        var dt = galLast ? Math.min(0.05, (ts - galLast) / 1000) : 0;
+        galLast = ts;
+        var max = gal.scrollWidth - gal.clientWidth;
+        if (ts > hold && max > 0 && !(lb && lb.open)) {
+          galAcc += 18 * dt * dir;              // ca. 18 Pixel pro Sekunde
+          var stepPx = galAcc | 0;
+          if (stepPx) { gal.scrollLeft += stepPx; galAcc -= stepPx; }
+          if (gal.scrollLeft >= max - 1) { dir = -1; hold = ts + 2500; }
+          else if (gal.scrollLeft <= 0 && dir < 0) { dir = 1; hold = ts + 2500; }
+        }
+        requestAnimationFrame(drift);
+      };
+      gal.style.scrollSnapType = "none"; // sonst springt das Einrasten beim Gleiten
+      gal.addEventListener("touchstart", function () { gal.style.scrollSnapType = ""; }, { passive: true });
+      requestAnimationFrame(drift);
+    }
+  }
+
   /* ---------- Einblenden beim Scrollen ---------- */
   var reveals = $$(".reveal");
   if ("IntersectionObserver" in window && !reduceMotion) {
