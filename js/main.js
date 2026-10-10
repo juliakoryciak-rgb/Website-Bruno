@@ -76,6 +76,16 @@
     $$("main section[id]").forEach(function (s) { spy.observe(s); });
   }
 
+  /* ---------- „Nach oben“ und Logo: ganz nach oben scrollen ---------- */
+  // Der Anker #top sitzt in der fixierten Navigation, darauf kann der Browser nicht scrollen.
+  $$('a[href="#top"]').forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      if (history.replaceState) history.replaceState(null, "", location.pathname + location.search);
+    });
+  });
+
   /* ---------- Genre-Laufband: so oft kopieren, dass nie eine Lücke entsteht ---------- */
   var track = $(".marquee__track");
   if (track) {
