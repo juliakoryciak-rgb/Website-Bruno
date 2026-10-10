@@ -558,31 +558,6 @@
     });
   }
 
-  /* ---------- E-Mail kopieren ---------- */
-  var copyBtn = $("[data-copy-email]");
-  if (copyBtn) {
-    var done = function () {
-      copyBtn.textContent = "Kopiert";
-      copyBtn.classList.add("is-done");
-      setTimeout(function () { copyBtn.textContent = "Kopieren"; copyBtn.classList.remove("is-done"); }, 1800);
-    };
-    var selectMail = function () {
-      var r = doc.createRange();
-      r.selectNodeContents($(".booking__mail"));
-      var sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(r);
-    };
-    copyBtn.addEventListener("click", function () {
-      var mail = S.email || "";
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(mail).then(done, selectMail);
-      } else {
-        selectMail();
-      }
-    });
-  }
-
   /* ---------- Uhrzeit im Hero ---------- */
   var clock = $("[data-clock]");
   if (clock) {
