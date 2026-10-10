@@ -319,8 +319,8 @@
   var scEmbeds = [];
   if (mixWrap && S.mixes) {
     S.mixes.forEach(function (m, idx) {
-      // Aufbau wie ein Player: Cover | Titel, Wellenform, Infos | Play-Button
-      var card = el("article", "card mix reveal");
+      // Quadratische Kachel wie ein Plattencover, darunter Name und Beschreibung
+      var card = el("article", "mix reveal");
 
       var cover = el("div", "mix__cover");
       if (m.cover) {
@@ -334,18 +334,20 @@
         var v = el("div", "vinyl");
         v.setAttribute("aria-hidden", "true");
         cover.appendChild(v);
-        cover.appendChild(el("span", "mix__cover-note", "Cover folgt"));
       }
+      var play = el("span", "mix__play");
+      play.setAttribute("aria-hidden", "true");
+      play.appendChild(el("span", "icon-play"));
+      cover.appendChild(play);
+      if (!m.soundcloud) cover.appendChild(el("span", "mix__soon-badge", "Coming soon"));
       card.appendChild(cover);
 
-      var body = el("div", "mix__body");
-      var head = el("div", "mix__head");
-      var titles = el("div");
-      titles.appendChild(el("p", "mix__artist", "brunoooo.mp3"));
-      titles.appendChild(el("h3", "mix__title", m.title));
-      head.appendChild(titles);
-      body.appendChild(head);
-      card.appendChild(body);
+      var info = el("div", "mix__info");
+      info.appendChild(el("h3", "mix__title", m.title));
+      var meta = el("p", "mix__meta");
+      meta.textContent = (m.note ? m.note + " · " : "") + m.length;
+      info.appendChild(meta);
+      card.appendChild(info);
 
       if (m.soundcloud) {
         // Zwei-Klick-Lösung: SoundCloud lädt erst nach Zustimmung (Datenschutz)
@@ -354,7 +356,7 @@
         var load = el("button", "btn btn--ghost btn--sm", "Player laden");
         load.type = "button";
         gate.appendChild(load);
-        body.appendChild(gate);
+        card.appendChild(gate);
         var embed = function () {
           var f = doc.createElement("iframe");
           f.loading = "lazy";
@@ -373,56 +375,6 @@
         var ok = false;
         try { ok = localStorage.getItem("sc-consent") === "1"; } catch (e) {}
         if (ok) embed();
-      } else {
-        // Noch kein Link: Player-Ansicht mit „Coming soon“
-        card.classList.add("mix--soon");
-        head.appendChild(el("span", "mix__soon-badge", "Coming soon"));
-
-        var wave = el("div", "mix__wave");
-        wave.setAttribute("aria-hidden", "true");
-        var base = el("div", "wave__layer");
-        var top = el("div", "wave__layer wave__layer--played");
-        var headLine = el("span", "wave__head");
-        var rnd = seeded(m.title + idx);
-        var n = window.innerWidth < 760 ? 48 : 96;
-        for (var i = 0; i < n; i++) {
-          var env = 0.4 + 0.6 * Math.abs(Math.sin(i / n * Math.PI * 2.2 + idx));
-          var h = Math.max(12, Math.round((0.35 + rnd() * 0.65) * env * 100)) + "%";
-          var a1 = el("span"); a1.style.height = h; base.appendChild(a1);
-          var a2 = el("span"); a2.style.height = h; top.appendChild(a2);
-        }
-        wave.appendChild(base);
-        wave.appendChild(top);
-        wave.appendChild(headLine);
-        body.appendChild(wave);
-
-        var meta = el("div", "mix__meta");
-        meta.appendChild(el("span", "mix__note", m.note || ""));
-        meta.appendChild(el("span", "mix__len", m.length));
-        body.appendChild(meta);
-
-        var play = el("span", "mix__play");
-        play.setAttribute("aria-hidden", "true");
-        play.appendChild(el("span", "icon-play"));
-        card.appendChild(play);
-
-        // Zeigt, wie es beim Abspielen aussieht: beim Drüberfahren läuft die Wellenform weich durch
-        var startP = [0.32, 0.58, 0.18][idx % 3], cur = startP, raf, last;
-        var paint = function (p) {
-          cur = p;
-          top.style.clipPath = "inset(0 " + (100 - p * 100).toFixed(2) + "% 0 0)";
-          headLine.style.left = (p * 100).toFixed(2) + "%";
-        };
-        paint(startP);
-        var run = function (ts) {
-          if (last) paint((cur + (ts - last) / 30000) % 1);
-          last = ts;
-          raf = requestAnimationFrame(run);
-        };
-        if (!reduceMotion) {
-          card.addEventListener("mouseenter", function () { cancelAnimationFrame(raf); last = 0; card.classList.add("is-playing"); raf = requestAnimationFrame(run); });
-          card.addEventListener("mouseleave", function () { cancelAnimationFrame(raf); card.classList.remove("is-playing"); });
-        }
       }
       mixWrap.appendChild(card);
     });

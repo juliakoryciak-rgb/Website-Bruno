@@ -321,41 +321,36 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 a.artist__track:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- Mixes ---------- */
-.mixes { display: flex; flex-direction: column; gap: 12px; }
-.mix { display: grid; grid-template-columns: 132px minmax(0, 1fr) 56px; align-items: center; gap: 24px; padding: 16px 24px 16px 16px; }
-.mix__cover { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--card-2); }
-.mix__cover img { width: 100%; height: 100%; object-fit: cover; }
-.mix__cover--empty { display: grid; place-items: center; background: radial-gradient(circle at 30% 25%, #a8c8cc22, transparent 60%), #0e0e0e; border: 1px solid var(--line-soft); }
-.mix__cover-note { position: absolute; left: 8px; bottom: 6px; font-family: var(--mono); font-size: 9px; color: var(--dim); }
+.mixes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.mix { min-width: 0; }
+.mix__cover { position: relative; aspect-ratio: 1; border-radius: 10px; overflow: hidden; background: #0e0e0e; }
+.mix__cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s cubic-bezier(.16, 1, .3, 1); }
+.mix:hover .mix__cover img { transform: scale(1.04); }
+.mix__cover--empty { display: grid; place-items: center; background: radial-gradient(circle at 30% 25%, #a8c8cc1f, transparent 60%), #0e0e0e; }
 .vinyl {
-  width: 64%; aspect-ratio: 1; border-radius: 50%;
-  background: repeating-radial-gradient(circle, #0b0b0b 0 2px, #141414 2px 3px);
-  display: grid; place-items: center; border: 1px solid #1e1e1e;
-  animation: spin 3s linear infinite paused;
+  width: 62%; aspect-ratio: 1; border-radius: 50%;
+  background: repeating-radial-gradient(circle, #0b0b0b 0 2px, #151515 2px 3px);
+  display: grid; place-items: center; box-shadow: 0 10px 30px #000a;
+  animation: spin 4s linear infinite paused;
 }
 .vinyl::after { content: ""; width: 34%; height: 34%; border-radius: 50%; background: radial-gradient(circle, #0d1516 0 6%, var(--accent) 8%); }
-.mix.is-playing .vinyl { animation-play-state: running; }
+.mix:hover .vinyl { animation-play-state: running; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.mix__body { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
-.mix__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.mix__artist { margin: 0; font-size: 11px; color: var(--muted); }
-.mix__title { margin: 2px 0 0; font-size: 19px; font-weight: 400; }
-.mix__wave { position: relative; height: 54px; }
-.mix__wave .wave__layer { gap: 2px; }
-.mix.is-playing .wave__layer--played span { background: var(--accent); }
-.mix.is-playing .wave__head { opacity: .9; }
-.mix__meta { display: flex; justify-content: space-between; gap: 12px; }
-.mix__note { margin: 0; font-size: 11px; color: var(--muted); }
-.mix__len { font-size: 11px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.mix__play { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); color: var(--dim); transition: border-color .3s ease, color .3s ease, background-color .3s ease; }
+.mix__play {
+  position: absolute; right: 14px; bottom: 14px; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+  background: var(--accent); color: var(--accent-ink); opacity: 0; transform: translateY(8px);
+  transition: opacity .35s ease, transform .35s cubic-bezier(.16, 1, .3, 1);
+}
 .mix__play .icon-play { margin-left: 3px; }
-.mix.is-playing .mix__play { border-color: var(--accent); color: var(--accent); }
-.mix__soon { display: none; }
-.mix__soon-badge { display: inline-flex; align-items: center; gap: 8px; flex: none; font-family: var(--mono); font-size: 11px; color: var(--accent); }
+.mix:hover .mix__play { opacity: 1; transform: none; }
+.mix__soon-badge { position: absolute; left: 12px; top: 12px; display: inline-flex; align-items: center; gap: 7px; padding: 5px 9px; border-radius: 999px; background: #0a0a0acc; font-family: var(--mono); font-size: 10px; color: var(--accent); }
 .mix__soon-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-.sc-gate { margin-top: 4px; padding: 14px; border: 1px dashed var(--line); border-radius: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.mix__info { padding-top: 14px; }
+.mix__title { margin: 0; font-size: 18px; font-weight: 400; }
+.mix__meta { margin: 4px 0 0; font-size: 12px; color: var(--muted); }
+.sc-gate { margin-top: 12px; padding: 12px; border: 1px dashed var(--line); border-radius: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .sc-gate__text { margin: 0; font-size: 11px; color: var(--muted); }
-.mix iframe { width: 100%; height: 166px; border: 0; border-radius: 6px; }
+.mix iframe { width: 100%; height: 166px; border: 0; border-radius: 6px; margin-top: 12px; }
 
 /* ---------- Gigs ---------- */
 .gigs { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 40px 48px; }
@@ -516,12 +511,11 @@ a.artist__track:hover { color: var(--accent); text-decoration: underline; text-u
   .wave__layer { gap: 1.5px; }
   .artist__name { font-size: 15px; }
 
-  .mix { grid-template-columns: 76px minmax(0, 1fr); gap: 14px; padding: 12px; }
-  .mix__play { display: none; }
-  .mix__cover-note { display: none; }
-  .mix__title { font-size: 16px; }
-  .mix__wave { height: 40px; }
-  .mix__wave .wave__layer { gap: 1.5px; }
+  /* Mixes auf dem Handy: seitlich wischbar */
+  .mixes { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter); scroll-padding-inline: var(--gutter); scrollbar-width: none; }
+  .mixes::-webkit-scrollbar { display: none; }
+  .mix { flex: 0 0 72%; scroll-snap-align: start; }
+  .mix__play { opacity: 1; transform: none; width: 40px; height: 40px; }
   .modes { grid-template-columns: 1fr; }
   .gigs__list { grid-template-columns: 1fr; }
   .fader { margin-bottom: 22px; }
