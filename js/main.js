@@ -347,9 +347,6 @@
 
       var info = el("div", "mix__info");
       info.appendChild(el("h3", "mix__title", m.title));
-      var meta = el("p", "mix__meta");
-      meta.textContent = (m.note ? m.note + " · " : "") + m.length;
-      info.appendChild(meta);
       card.appendChild(info);
 
       if (m.soundcloud) {
